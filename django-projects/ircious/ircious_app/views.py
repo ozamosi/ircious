@@ -60,9 +60,8 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
 
 def _display_common(response_dict, page, p):
     paginator = ObjectPaginator(p, 20, 2)
-    try:
-        p = paginator.get_page(page)
-    except IndexError:
+    p = paginator.get_page(page)
+    if not p:
         raise Http404
     response_dict['object_list'] = p
     response_dict['page'] = page
