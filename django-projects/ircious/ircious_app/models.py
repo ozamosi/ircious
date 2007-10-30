@@ -18,7 +18,7 @@ class LinkObj(models.Model):
         fieldlist += ['num']
         return map((lambda x: dict(zip(fieldlist, x))), result)
     class Meta:
-        ordering = ['-last_post_id']
+        ordering = ['-last_post']
         get_latest_by = "last_post_id"
                     
 

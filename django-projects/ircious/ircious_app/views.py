@@ -16,10 +16,10 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
     if error:
         response_dict['error']=error
     if username:
-        p = p.filter(user__nick__nickname=username)
+        p = p.filter(latest_post__user__nick__nickname=username)
         response_dict['nick']=username
     elif channel:
-        p = p.filter(channel__name="#"+channel)
+        p = p.filter(latest_post__channel__name="#"+channel)
         response_dict['channel']=channel
     response_dict = _display_common(response_dict, page, p)
     response_dict['nick'] = username

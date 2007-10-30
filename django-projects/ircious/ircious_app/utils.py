@@ -16,12 +16,13 @@ def addOidUser(nick, url, fromirc=True):
     Add OpenID to users profile, making sure the URL is syntactically correct
     
     >>> addOidUser('test-nick', 'http://example.com')
-    None
     >>> addOidUser('test-nick', 'example.com')
-    ValueError
+    Traceback (most recent call last):
+    ...
+    ValueError: No scheme specified
     """
     
-    correctuser = _getUserWithNick(nick)
+    correctuser = getUserWithNick(nick)
     n = correctuser.nick_set.filter(nickname=nick)[0]
     if fromirc and not n:
         n.verified_user = fromirc
@@ -36,10 +37,20 @@ def addPost(nick, channel, url, descr):
     """
     Add post to database
 
-    >>> addPost('test-nick', 'test-channel', 'http://example.com', 'Super-cool'
-    None
+    >>> addPost('test-nick', 'test-channel', 'http://example.com', 'Super-cool')
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid channel
+    >>> b = IrcNetwork()
+    >>> b.save()
+    >>> a = IrcChannel(name="ircious", network=b)
+    >>> a.save()
+    >>> addPost('test-nick', 'ircious', 'http://example.com', 'Super-cool')
     """
-    channelobj = IrcChannel.objects.filter(name=channel)[0]
+    channelobjs = IrcChannel.objects.filter(name=channel)
+    if not channelobjs:
+        raise ValueError, "Invalid channel"
+    channelobj = channelobjs[0]
     existinglinkobj = LinkObj.objects.filter(url=url)
     if not existinglinkobj:
         try:
@@ -75,20 +86,20 @@ def addPost(nick, channel, url, descr):
         correctlinkobj.save()
     else:
         correctlinkobj = existinglinkobj[0]
-    correctuser = _getUserWithNick(nick)
+    correctuser = getUserWithNick(nick)
     
     lp = LinkPost(link=correctlinkobj, user=correctuser, comment=descr, channel=channelobj)
     lp.save()
     correctlinkobj.last_post = lp
     correctlinkobj.save()
 
-def _getUserWithNick(nick):
+def getUserWithNick(nick):
     """
     Get a user object from a specified nickname
 
-    >>> a = _getUserWithNick("test")
-    >>> b = _getUserWithNick("test2")
-    >>> c = _getUserWithNick("test")
+    >>> a = getUserWithNick("test")
+    >>> b = getUserWithNick("test2")
+    >>> c = getUserWithNick("test")
     >>> a == b
     False
     >>> a == c
@@ -106,14 +117,13 @@ def _getUserWithNick(nick):
         correctuser = existinguser[0]
     return correctuser
 
-def _getYoutubeScreenshotUrl(url)
+def getYoutubeScreenshotUrl(url):
     """
     From a Youtube URL, retrieve the screenshot
 
-    >>> _getYoutubeScreenshotUrl('http://youtube.com/watch?v=_y36fG2Oba0')
-    "http://img.youtube.com/vi/_y36fG2Oba0/default.jpg"
-    >>> _getYoutubeScreenshotUrl('')
-    None
+    >>> getYoutubeScreenshotUrl('http://youtube.com/watch?v=_y36fG2Oba0')
+    'http://img.youtube.com/vi/_y36fG2Oba0/default.jpg'
+    >>> getYoutubeScreenshotUrl('')
     """
     if not url.startswith("http://youtube.com") and not url.startswith("http://www.youtube.com"):
         return None
@@ -126,7 +136,7 @@ def _getYoutubeScreenshotUrl(url)
     except ValueError:
         end = len(url)
     videoid = url[start:end]
-    response = urllib.urlopen("http://www.youtube.com/api2_rest?method=youtube.videos.get_details&dev_id=6PcFFFsNxi4&video_id=%s" % videoid)
+    response = urlopen("http://www.youtube.com/api2_rest?method=youtube.videos.get_details&dev_id=6PcFFFsNxi4&video_id=%s" % videoid)
     xmlfile = response.read()
     start = xmlfile.index("<thumbnail_url>") + len("<thumbnail_url>")
     end = xmlfile.index("</thumbnail_url>")
