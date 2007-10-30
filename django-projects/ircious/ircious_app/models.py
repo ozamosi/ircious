@@ -6,6 +6,7 @@ class LinkObj(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(prepopulate_from=("title",))
     last_post = models.ForeignKey('LinkPost', blank=True, null=True)
+    screenshot = models.URLField(blank=True, null=True)
     class Admin:
         pass
     def __unicode__(self): return self.title

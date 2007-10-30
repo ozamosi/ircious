@@ -46,6 +46,12 @@ def addPost(nick, channel, url, descr):
     >>> a = IrcChannel(name="ircious", network=b)
     >>> a.save()
     >>> addPost('test-nick', 'ircious', 'http://example.com', 'Super-cool')
+    >>> p = LinkObj.objects.filter(last_post__comment='Super-cool')[0]
+    >>> p.screenshot
+    >>> addPost('test-nick2', 'ircious', 'http://youtube.com/watch?v=_y36fG2Oba0', 'Great!')
+    >>> p = LinkObj.objects.filter(last_post__comment='Great!')[0]
+    >>> p.screenshot
+    u'http://img.youtube.com/vi/_y36fG2Oba0/default.jpg'
     """
     channelobjs = IrcChannel.objects.filter(name=channel)
     if not channelobjs:
@@ -73,6 +79,7 @@ def addPost(nick, channel, url, descr):
                             title = page[:50]+"..."
                         else:
                             title = url
+            screenshot_url = getYoutubeScreenshotUrl(url)
             try:
                 title = title.decode('utf-8')
             except UnicodeDecodeError:
@@ -82,7 +89,7 @@ def addPost(nick, channel, url, descr):
             title.encode('utf-8')
         except IOError:
             return
-        correctlinkobj = LinkObj(url=url, title=title, slug=_slugify(title))
+        correctlinkobj = LinkObj(url=url, title=title, slug=_slugify(title), screenshot=screenshot_url)
         correctlinkobj.save()
     else:
         correctlinkobj = existinglinkobj[0]
