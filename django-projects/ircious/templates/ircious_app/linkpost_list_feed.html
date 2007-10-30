@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Ircious{% if nick %} - {{ nick }}{% endif %}</title>
+    <link rel="self" href="http://ircious.flukkost.nu/{% if nick %}user/{{ nick }}{% endif %}feed/{% if page %}{{ page }}{% endif %}"/>
+    <link rel="alternate" type="application/xhtml+xml" href="http://ircious.flukkost.nu/{% if nick %}user/{{ nick }}{% endif %}{% if page %}{{ page }}{% endif %}"/>
+    <updated>{{ lastdate|date:"Y-m-d\TH:i:s\Z" }}</updated>
+    <author>
+        <name>Ircious</name>
+    </author>
+    <id>http://ircious.flukkost.nu/{% if nick %}user/{{ nick }}{% endif %}/feed{% if page %}{{ page }}{% endif %}</id>
+
+    {% for post in object_list %}
+    <entry>
+        <title>{{ post.link.title }}</title>
+        <link rel="alternate" href="http://ircious.flukkost.nu/slug/{{ post.link.slug }}"/>
+        <id>http://ircious.flukkost.nu/{{ post.pk }}</id>
+        <updated>{{ post.date|date:"Y-m-d\TH:i:s\Z" }}</updated>
+        <summary>{{ post.comment|striptags }}</summary>
+        <author>
+            <name>{{ post.user.nick_set.get.nickname }}</name>
+        </author>
+        <link rel="via" href="{{ post.link.url }}"/>
+    </entry>
+    {% endfor %}
+</feed>

@@ -1,0 +1,72 @@
+{% load misc %}<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv">
+<head>
+    <title>{% block title %}Ircious{% endblock %}</title>
+    <link rel="alternate" type="application/atom+xml" href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}"/>
+    <link rel="stylesheet" type="text/css" href="http://media.ircious.flukkost.nu/style.css"/>
+    <script src="http://media.ircious.flukkost.nu/localize_dates.js" type="text/javascript"/>
+</head>
+<body>
+    <div id="header">
+        <h1><a href="/">Ircious</a></h1>
+        <h2>Your favourite links, straight from IRC</h2>
+        <div id="login-info">
+        {% if openid %}
+            Welcome, {{ openid.nick_set.get.nickname }}. <a href="/openid/signout">Logout</a>
+        {% else %}
+            <form action="/openid/" method="post">
+                <label for="openid_url">Sign in:</label>
+                <input class="openid" type="text" name="openid_url" id="openid_url"/>
+                <a href="/accounts/">Help</a>
+            </form>
+        {% endif %}
+        </div>
+    </div>
+    <div id="content">
+        {% if error %}<div id="error">{{ error }}</div>{% endif %}
+        {% block content %}<p>Nice weather for ducks</p>{% endblock %}
+        {% if prev or page %}
+        <p class="prev"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ prev }}">Previous</a></p>
+        {% endif %}
+        {% if next %}
+        <p class="next"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ next }}">Next</a></p>
+        {% endif %}
+    </div>
+    <div id="sidebar">
+        <ul class="xoxo">
+            <li>
+                <h3>Most popular</h3>
+                <ul>
+                {% for pop in popular %}
+                    <li><a href="/slug/{{ pop.slug }}">{{ pop.title|striptags }}</a> ({{ pop.num }})</li>
+                {% endfor %}
+                </ul>
+            </li>
+            <li>
+                <h3>Users</h3>
+                <ul>
+                {% for nick in topusers %}
+                    <li><a href="/user/{{ nick.nick }}">{{ nick.nick }}</a> ({{ nick.num }})</li>
+                {% endfor %}
+                </ul>
+            </li>
+            <li>
+                <h3>Channels</h3>
+                <ul>
+                {% for channel in topchannels %}
+                    <li><a href="/channel/{{ channel.name|strip:"#" }}">{{ channel.name }}</a> {% if channel.num %}({{ channel.num }}){% endif %}</li>
+                {% endfor %}
+                </ul>
+            </li>
+            <li>
+            </li>
+        </ul>
+    </div>
+    <div id="footer">
+        Copyright &#169; 2007 Robin Sonefors. No rights reserved. <a href="/whatisthis">What is this?</a>
+        <a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}" rel="alternate" type="application/atom+xml"><img src="http://media.ircious.flukkost.nu/feed-icon.png" alt="Feed"/></a>
+
+    </div>
+</body>
+</html>

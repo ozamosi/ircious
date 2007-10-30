@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load strip %}
+{% block title %}Ircious - {{ object.title }}{% endblock %}
+
+{% block content %}
+<h3><a href="{{ object.url }}">{{ object.title }}</a></h3>
+    {% for post in object_list %}
+    <div class="post">
+        <p>{{ post.comment|striptags }}</p>
+        <p>Posted by <a href="/user/{{ post.user.nick_set.get.nickname }}">{{ post.user.nick_set.get.nickname }}</a> in <a href="{{ post.channel|strip:"#" }}">{{ post.channel }}</a> on <time title="GMT" datetime="{{ post.date|date:"Y-m-d\TH:i:s\Z" }}">{{ post.date }}</time></p>
+    </div>
+    {% endfor %}
+{% endblock %}

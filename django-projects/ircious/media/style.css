@@ -1,0 +1,54 @@
+div#sidebar {
+    float: right;
+    overflow: hidden;
+    width: 280px;
+}
+
+div#content {
+    float: left;
+    margin: 0 -300px 0 0;
+    width: 100%;
+}
+
+div.post {
+    margin: 0 300px 0 0;
+    clear: both;
+}
+
+div#sidebar ul.xoxo {
+    list-style-type: none;
+}
+
+img {
+    border: 0;
+}
+
+div#footer img {
+    float: right;
+}
+
+div#footer {
+    clear: both;
+    font-size: 80%;
+    text-align: center;
+}
+
+div#login-info {
+    float: right;
+    font-size: 80%;
+}
+
+input.openid {
+    background: url("http://media.ircious.flukkost.nu/login-bg.gif") no-repeat;
+    background-position: 0 50%;
+    padding-left: 16px;
+}
+
+img.gravatar {
+    float: left;
+}
+
+#error {
+    background: #ffcccc;
+    border: 1px solid #dd2222;
+}

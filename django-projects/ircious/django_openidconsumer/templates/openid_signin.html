@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Sign in with your OpenID</title>
+<style type="text/css">
+<![CDATA[
+input.openid {
+  background: url({{ logo }}) no-repeat; 
+  background-position: 0 50%;
+  padding-left: 16px;
+}
+]]>
+</style>
+</head>
+<body>
+<h1>Sign in with your OpenID</h1>
+
+<form action="{{ action }}" method="post">
+<p><input class="openid" type="text" name="openid_url" /> <input type="submit" value="Sign in" /></p>
+</form>
+
+</body>
+</html>

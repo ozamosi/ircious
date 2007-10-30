@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Editing {{ object.link.title }}</h3>
+<form method="post" action="">
+{{ form.as_p }}
+<input type="submit" />
+</form>
+{% endblock %}
