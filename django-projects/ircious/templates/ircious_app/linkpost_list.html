@@ -9,14 +9,14 @@
     {% for post in object_list %}
     <div class="post">
         <h4><a href="{{ post.link.url }}">{{ post.link.title|striptags }}</a></h4>
-        {% if post.user.email %}<img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fuse.perl.org%2Fimages%2Fpix.gif" class="gravatar" />{% endif %}
+        {% if post.user.email %}<img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fuse.perl.org%2Fimages%2Fpix.gif" class="gravatar" alt=""/>{% endif %}
         <div class="postcontent">
             <p>{{ post.comment|striptags|urlize }}</p>
             <p><a href="/slug/{{ post.link.slug }}">More {% ifnotequal post.link.linkpost_set.count 1 %}({{ post.link.linkpost_set.count }} comments){% endifnotequal %}</a></p>
             <p>Posted by <a href="/user/{{ post.user.nick_set.get.nickname }}">{{ post.user.nick_set.get.nickname }}</a> in <a href="/channel/{{ post.channel|strip:"#" }}">{{ post.channel }}</a> on <time title="GMT" datetime="{{ post.date|date:"Y-m-d\TH:i:s\Z" }}">{{ post.date }}</time>
         {% if openid %}{% ifequal openid post.user %}<a href="{{ post.id }}/edit">Edit</a> <a href="{{ post.id }}/delete">Delete</a>{% endifequal %}{% endif %}</p>
         </div>
-        {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" class="screenshot"/>{% endif %}
+        {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" class="screenshot" alt=""/>{% endif %}
     </div>
     {% endfor %}
 {% endblock %}
