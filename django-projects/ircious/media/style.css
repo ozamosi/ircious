@@ -15,6 +15,11 @@ div.post {
     clear: both;
 }
 
+div.postcontent {
+    float:left;
+    padding: 10px;
+}
+
 div#sidebar ul.xoxo {
     list-style-type: none;
 }
@@ -46,9 +51,15 @@ input.openid {
 
 img.gravatar {
     float: left;
+    padding-top: 5px;
 }
 
 #error {
     background: #ffcccc;
     border: 1px solid #dd2222;
+    padding: 3px;
+    margin-right: 300px;
+}
+img.screenshot {
+    float: left;
 }
