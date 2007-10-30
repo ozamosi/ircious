@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import ObjectPaginator
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.http import Http404
 
 def list(request, username=None, page=None, feed=False, channel=None, error=None):
     if page: 
@@ -16,10 +17,10 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
     if error:
         response_dict['error']=error
     if username:
-        p = p.filter(latest_post__user__nick__nickname=username)
+        p = p.filter(last_post__user__nick__nickname=username)
         response_dict['nick']=username
     elif channel:
-        p = p.filter(latest_post__channel__name="#"+channel)
+        p = p.filter(last_post__channel__name="#"+channel)
         response_dict['channel']=channel
     response_dict = _display_common(response_dict, page, p)
     response_dict['nick'] = username
@@ -59,13 +60,13 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
 
 def _display_common(response_dict, page, p):
     paginator = ObjectPaginator(p, 20, 2)
-    p = paginator.get_page(page)
+    try:
+        p = paginator.get_page(page)
+    except IndexError:
+        raise Http404
     response_dict['object_list'] = p
     response_dict['page'] = page
-    try:
-        response_dict['lastdate'] = p[0].date
-    except AttributeError:
-        response_dict['lastdate'] = p[0].last_post.date
+    
     if paginator.has_next_page(page):
         response_dict['next'] = page+1
     if paginator.has_previous_page(page):
@@ -79,7 +80,11 @@ def _common(request):
         x['title'] = x['title'].replace("&", "&amp;")
     topusers = User().toplist(5)
     topchannels = IrcChannel().toplist(5)
-    lastdate = LinkPost.objects.all()[0].date
+    try:
+        lastdate = LinkPost.objects.all()[0].date
+    except IndexError:
+        import datetime
+        lastdate = datetime.datetime.now()
     response_dict = {'popular': popular, 'topusers': topusers, 'lastdate': lastdate, 'topchannels': topchannels}
     if request.openid:
         response_dict['openid'] = User.objects.filter(oid_url=request.openid)[0]
