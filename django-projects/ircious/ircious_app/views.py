@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel
 from ircious.ircious_app.forms import EditForm
+from ircious.ircious_app import utils
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import ObjectPaginator
 from django.http import HttpResponseRedirect
@@ -131,7 +132,16 @@ def edit(request, id):
         if form.is_valid():
             object.comment = form.cleaned_data['comment']
             if form.cleaned_data['recheck']:
-                pass #Not implemented
+                url = object.link.url
+                try:
+                    title = utils.getTitleFromUrl(url)
+                except IOError:
+                    return
+                screenshot_url = utils.getYoutubeScreenshotUrl(url)
+                object.link.title=title
+                object.link.slug=utils.slugify(title)
+                object.link.screenshot=screenshot_url
+                object.link.save()
             object.save()
             return HttpResponseRedirect(reverse('ircious.ircious_app.views.showlink', kwargs={'slug': object.link.slug}))
     else:

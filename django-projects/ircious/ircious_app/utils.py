@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from ircious.ircious_app.models import LinkObj, User, LinkPost, Nick, IrcNetwork, IrcChannel
 from urllib2 import urlopen
 from htmlentitydefs import name2codepoint
@@ -10,7 +11,6 @@ except AttributeError:
     from openid import urinorm
     normalizeUrl = urinorm.urinorm
             
-
 def addOidUser(nick, url, fromirc=True):
     """
     Add OpenID to users profile, making sure the URL is syntactically correct
@@ -71,36 +71,11 @@ def addPost(nick, channel, url, descr):
     existinglinkobj = LinkObj.objects.filter(url=url)
     if not existinglinkobj:
         try:
-            page = urlopen(url)
-            if page.headers.maintype not in ['text', 'application']: #If it's not text, html or XML, basicly
-                title = url
-            else:
-                pagecontents =  page.read()
-                try:
-                    start = pagecontents.lower().index("<title>") + len("<title>")
-                    end = pagecontents.lower().index("</title>", start)
-                    title = pagecontents[start:end]
-                except ValueError:
-                    try:
-                        start = pagecontents.lower().index("<h1>") + len("<h1>")
-                        end = pagecontents.lower().index("</h1>", start)
-                        title = pagecontents[start:end]
-                    except ValueError:
-                        if page.headers.type in ['text/plain']:
-                            title = page[:50]+"..."
-                        else:
-                            title = url
-            screenshot_url = getYoutubeScreenshotUrl(url)
-            try:
-                title = title.decode('utf-8')
-            except UnicodeDecodeError:
-                title = title.decode('latin-1')
-            for x in name2codepoint:
-                title = title.replace('&'+x+';', unichr(name2codepoint[x]))
-            title.encode('utf-8')
+            title = getTitleFromUrl(url)
         except IOError:
             return
-        correctlinkobj = LinkObj(url=url, title=title, slug=_slugify(title), screenshot=screenshot_url)
+        screenshot_url = getYoutubeScreenshotUrl(url)
+        correctlinkobj = LinkObj(url=url, title=title, slug=slugify(title), screenshot=screenshot_url)
         correctlinkobj.save()
     else:
         correctlinkobj = existinglinkobj[0]
@@ -110,6 +85,50 @@ def addPost(nick, channel, url, descr):
     lp.save()
     correctlinkobj.last_post = lp
     correctlinkobj.save()
+
+def getTitleFromUrl(url):
+    """
+    Download the URL and try to extract a title
+
+    >>> #Has proper title
+    >>> getTitleFromUrl('http://google.com')
+    'Google'
+    >>> #Fallback to <h1>
+    >>> getTitleFromUrl('http://flukkost.nu')
+    'Flukkosten är serverad!'
+    >>> #Fallback to first line
+    >>> getTitleFromUrl('http://www.0xdeadbeef.com/html/monkeys.txt')
+    'I LIKE MONKEYS'
+    >>> getTitleFromUrl('http://use.perl.org/images/pix.gif')
+    'http://use.perl.org/images/pix.gif'
+    """
+    page = urlopen(url)
+    if page.headers.maintype not in ['text', 'application']: #If it's not text, html or XML, basicly
+        title = url
+    else:
+        pagecontents =  page.read()
+        try:
+            start = pagecontents.lower().index("<title>") + len("<title>")
+            end = pagecontents.lower().index("</title>", start)
+            title = pagecontents[start:end]
+        except ValueError:
+            try:
+                start = pagecontents.lower().index("<h1>") + len("<h1>")
+                end = pagecontents.lower().index("</h1>", start)
+                title = pagecontents[start:end]
+            except ValueError:
+                if page.headers.type in ['text/plain']:
+                    title = page[:50]+"..."
+                else:
+                    title = url
+    # Try to autodetect the encoding:
+    try:
+        title = title.decode('utf-8')
+    except UnicodeDecodeError:
+        title = title.decode('latin-1')
+    for x in name2codepoint:
+        title = title.replace('&'+x+';', unichr(name2codepoint[x]))
+    return title.strip().encode('utf-8')
 
 def getUserWithNick(nick):
     """
@@ -160,7 +179,7 @@ def getYoutubeScreenshotUrl(url):
     end = xmlfile.index("</thumbnail_url>")
     return xmlfile[start:end]
 
-def _slugify(inStr):
+def slugify(inStr):
     removelist = ["a", "an", "as", "at", "before", "but", "by", "for","from","is", "in", "into", "like", "of", "off", "on", "onto","per","since", "than", "the", "this", "that", "to", "up", "via","with"];
     for a in removelist:
         aslug = re.sub(r'\b'+a+r'\b','',inStr)
