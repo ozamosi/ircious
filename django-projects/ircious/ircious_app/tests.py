@@ -5,6 +5,34 @@ from ircious.ircious_app.models import LinkObj
 from django.test import TestCase
 from django.test.client import Client
 
+class TestEditDelete(TestCase):
+    def setUp(self):
+        TestCase.setUp(self)
+        u = User()
+        u.save()
+        n = Nick(nickname="ozamosi", user=u)
+        n.save()
+        inw = IrcNetwork()
+        inw.save()
+        ic = IrcChannel(network=inw, name="#ircious")
+        ic.save()
+        lo = LinkObj(slug='test-one-that-actually-does-exist', url='http://example.com', title='Test')
+        lo.save()
+        lp = LinkPost(comment="Test", user=u, link=lo, channel=ic)
+        lp.save()
+        lo.last_post = lp
+        lo.save()
+
+    def test_edit(self):
+        lp = LinkPost.objects.all()[0]
+        response = self.client.get('/%i/edit/' % lp.pk)
+        self.failUnlessEqual(response.status_code, 200)
+
+    def test_delet(self):
+        lp = LinkPost.objects.all()[0]
+        response = self.client.get('/%i/delete/' % lp.pk)
+        self.failUnlessEqual(response.status_code, 200)
+
 class TestAllUrlWorks(TestCase):
     def setUp(self):
         TestCase.setUp(self)

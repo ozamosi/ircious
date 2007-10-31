@@ -20,16 +20,23 @@ def addOidUser(nick, url, fromirc=True):
     Traceback (most recent call last):
     ...
     ValueError: No scheme specified
+    >>> addOidUser('test-nick2', 'http://example.com', False)
+    >>> u1 = Nick.objects.filter(nickname='test-nick')[0]
+    >>> u2 = Nick.objects.filter(nickname='test-nick2')[0]
+    >>> u1.verified_user
+    True
+    >>> u2.verified_user
+    False
     """
     
     correctuser = getUserWithNick(nick)
-    n = correctuser.nick_set.filter(nickname=nick)[0]
-    if fromirc and not n:
-        n.verified_user = fromirc
+    nick = correctuser.nick_set.filter(nickname=nick)[0]
+    if fromirc and nick:
+        nick.verified_user = fromirc
+        nick.save()
     oid_url = normalizeUrl(url)
     if not oid_url:
         raise ValueError
-    n.save()
     correctuser.oid_url = oid_url
     correctuser.save()
 
@@ -52,6 +59,10 @@ def addPost(nick, channel, url, descr):
     >>> p = LinkObj.objects.filter(last_post__comment='Great!')[0]
     >>> p.screenshot
     u'http://img.youtube.com/vi/_y36fG2Oba0/default.jpg'
+    >>> addPost('test-nick3', 'ircious', 'http://example.com', 'Amazing')
+    >>> p = LinkObj.objects.all()[0]
+    >>> p.last_post.comment
+    u'Amazing'
     """
     channelobjs = IrcChannel.objects.filter(name=channel)
     if not channelobjs:
