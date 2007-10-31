@@ -48,20 +48,22 @@ def addPost(nick, channel, url, descr):
     Traceback (most recent call last):
     ...
     ValueError: Invalid channel
-    >>> b = IrcNetwork()
-    >>> b.save()
-    >>> a = IrcChannel(name="ircious", network=b)
-    >>> a.save()
+    >>> u = User()
+    >>> u.save()
+    >>> inw = IrcNetwork()
+    >>> inw.save()
+    >>> ic = IrcChannel(name="ircious", network=inw, requested_by=u)
+    >>> ic.save()
     >>> addPost('test-nick', 'ircious', 'http://example.com', 'Super-cool')
-    >>> p = LinkObj.objects.filter(last_post__comment='Super-cool')[0]
-    >>> p.screenshot
+    >>> lo = LinkObj.objects.filter(last_post__comment='Super-cool')[0]
+    >>> lo.screenshot
     >>> addPost('test-nick2', 'ircious', 'http://youtube.com/watch?v=_y36fG2Oba0', 'Great!')
-    >>> p = LinkObj.objects.filter(last_post__comment='Great!')[0]
-    >>> p.screenshot
+    >>> lo = LinkObj.objects.filter(last_post__comment='Great!')[0]
+    >>> lo.screenshot
     u'http://img.youtube.com/vi/_y36fG2Oba0/default.jpg'
     >>> addPost('test-nick3', 'ircious', 'http://example.com', 'Amazing')
-    >>> p = LinkObj.objects.all()[0]
-    >>> p.last_post.comment
+    >>> lo = LinkObj.objects.all()[0]
+    >>> lo.last_post.comment
     u'Amazing'
     """
     channelobjs = IrcChannel.objects.filter(name=channel)
@@ -94,8 +96,8 @@ def getTitleFromUrl(url):
     >>> getTitleFromUrl('http://google.com')
     'Google'
     >>> #Fallback to <h1>
-    >>> getTitleFromUrl('http://flukkost.nu')
-    'Flukkosten är serverad!'
+    >>> getTitleFromUrl('http://flukkost.nu') == 'Flukkosten är serverad!'
+    True
     >>> #Fallback to first line
     >>> getTitleFromUrl('http://www.0xdeadbeef.com/html/monkeys.txt')
     'I LIKE MONKEYS'
@@ -118,7 +120,10 @@ def getTitleFromUrl(url):
                 title = pagecontents[start:end]
             except ValueError:
                 if page.headers.type in ['text/plain']:
-                    title = page[:50]+"..."
+                    try:
+                        title = pagecontents[:pagecontents.index('\n')]
+                    except ValueError:
+                        title = url
                 else:
                     title = url
     # Try to autodetect the encoding:

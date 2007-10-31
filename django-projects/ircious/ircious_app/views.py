@@ -90,7 +90,7 @@ def _common(request):
         response_dict['openid'] = User.objects.filter(oid_url=request.openid)[0]
     return response_dict
 
-def _validate(request, id):
+def _post_validate(request, id):
     response_dict = _common(request)
     if not request.openid:
         response_dict['error'] = "You naughty girl! You're not logged in!"
@@ -111,8 +111,8 @@ def _validate(request, id):
     response_dict['object'] = object
     return response_dict
 
-def delete(request, id):
-    response_dict = _validate(request, id)
+def delete_post(request, id):
+    response_dict = _post_validate(request, id)
     if response_dict.has_key('error'):
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     object = response_dict.pop('object')
@@ -120,10 +120,10 @@ def delete(request, id):
     object.delete()
     if linkobj.linkpost_set.count() == 0:
         linkobj.delete()
-    return HttpResponseRedirect(reverse('ircious.ircious_app.views.list'))
+    return HttpResponseRedirect('/')
 
-def edit(request, id):
-    response_dict = _validate(request, id)
+def edit_post(request, id):
+    response_dict = _post_validate(request, id)
     if response_dict.has_key('error'):
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     object = response_dict['object']
@@ -148,3 +148,22 @@ def edit(request, id):
         form = EditForm({'comment': object.comment})
     response_dict['form'] = form
     return render_to_response('ircious_app/edit.html', response_dict)
+
+def add_channel(request):
+    response_dict = _common(request)
+    if request.method == 'POST':
+        form = RequestChannelForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            network = IrcNetwork.objects.filter(name=data['network'])
+            if not network:
+                network = IrcNetwork(name=data['network'])
+            else:
+                network = network[0]
+            if not IrcChannel.objects.filter(name=data['channel'], network=network):
+                IrcChannel(name=data['channel'], network=network, requested_by=data['nick'])
+            return HttpResponseRedirect('/')
+    else:
+        form = RequestChannelForm()
+    response_dict['form'] = form
+    return render_to_response('ircious_app/add_channel.html', response_dict)

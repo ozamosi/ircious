@@ -12,6 +12,6 @@ urlpatterns = patterns('ircious.ircious_app.views',
     (r'^slug/(?P<slug>[a-z0-9-]+)/(?P<page>\d+)/$', 'showlink'),
     (r'^slug/(?P<slug>[a-z0-9-]+)/feed/((?P<page>\d+)/)?$', 'showlink', {'feed': True}),
 
-    (r'^(?P<id>[0-9]+)/edit', 'edit',),
-    (r'^(?P<id>[0-9]+)/delete', 'delete',),
+    (r'^(?P<id>[0-9]+)/edit', 'edit_post',),
+    (r'^(?P<id>[0-9]+)/delete', 'delete_post',),
 )

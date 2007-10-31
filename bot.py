@@ -82,7 +82,10 @@ def main():
         bot.start()
         return
     for network in IrcNetwork.objects.all():
-        bot = TestBot(network.ircchannel_set.all(), network.bot_nick, network.uri, 6667)
+        channels = network.ircchannel_set.filter(active=True)
+        if not channels:
+            continue
+        bot = TestBot(channels, network.bot_nick, network.uri, 6667)
         bot.start()
 
 if __name__ == "__main__":

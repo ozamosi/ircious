@@ -14,7 +14,7 @@ class TestEditDelete(TestCase):
         n.save()
         inw = IrcNetwork()
         inw.save()
-        ic = IrcChannel(network=inw, name="#ircious")
+        ic = IrcChannel(network=inw, name="#ircious", requested_by=u)
         ic.save()
         lo = LinkObj(slug='test-one-that-actually-does-exist', url='http://example.com', title='Test')
         lo.save()
@@ -42,7 +42,7 @@ class TestAllUrlWorks(TestCase):
         n.save()
         inw = IrcNetwork()
         inw.save()
-        ic = IrcChannel(network=inw, name="#ircious")
+        ic = IrcChannel(network=inw, name="#ircious", requested_by=u)
         ic.save()
         lo = LinkObj(slug='test-one-that-actually-does-exist', url='http://example.com', title='Test')
         lo.save()
@@ -82,6 +82,7 @@ __test__ = {
     'addPost': utils.addPost,
     'getUserWithNick': utils.getUserWithNick,
     'getYoutubeScreenshotUrl': utils.getYoutubeScreenshotUrl,
+    'getTitleFromUrl': utils.getTitleFromUrl,
 }
 
 if __name__ == "__main__":

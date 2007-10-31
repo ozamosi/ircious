@@ -39,8 +39,8 @@ class User(models.Model):
 
 class IrcNetwork(models.Model):
     name = models.CharField(max_length=30)
-    uri = models.CharField(max_length=200)
-    bot_nick = models.CharField(max_length=30)
+    uri = models.CharField(max_length=200, blank=True)
+    bot_nick = models.CharField(max_length=30, default="ircious")
     def __unicode__(self): return self.name
     class Admin:
         pass
@@ -48,6 +48,8 @@ class IrcNetwork(models.Model):
 class IrcChannel(models.Model):
     name = models.CharField(max_length=30, core=True)
     network = models.ForeignKey(IrcNetwork, edit_inline=models.STACKED, num_in_admin=3)
+    active = models.BooleanField(default=False)
+    requested_by = models.ForeignKey(User)
     def __unicode__(self): return self.name
     class Admin:
         pass
