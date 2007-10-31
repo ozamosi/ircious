@@ -24,14 +24,16 @@
         </div>
     </div>
     <div id="content">
-        {% if error %}<div id="error">{{ error }}</div>{% endif %}
-        {% block content %}<p>Nice weather for ducks</p>{% endblock %}
-        {% if prev or page %}
-        <p class="prev"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ prev }}">Previous</a></p>
-        {% endif %}
-        {% if next %}
-        <p class="next"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ next }}">Next</a></p>
-        {% endif %}
+        <div id="innercontent">
+            {% if error %}<div id="error">{{ error }}</div>{% endif %}
+            {% block content %}<p>Nice weather for ducks</p>{% endblock %}
+            {% if prev or page %}
+            <p class="prev"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ prev }}">Previous</a></p>
+            {% endif %}
+            {% if next %}
+            <p class="next"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ next }}">Next</a></p>
+            {% endif %}
+        </div>
     </div>
     <div id="sidebar">
         <ul class="xoxo">

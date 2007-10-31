@@ -1,7 +1,24 @@
+body {
+    margin: 0px;
+    background: #8eb1c9;
+}
+
 div#sidebar {
     float: right;
     overflow: hidden;
     width: 280px;
+    padding-right: 8px;
+}
+
+div#header {
+    padding-left: 130px;
+}
+
+div#header, div#header h1 a, div#header h1 a:active, div#login-info {
+    margin: 0px;
+    background: #133146;
+    color: #fff;
+    text-decoration: none;
 }
 
 div#content {
@@ -10,14 +27,30 @@ div#content {
     width: 100%;
 }
 
+div#innercontent {
+    background: #fff;
+    margin-right: 300px;
+    margin-top: 0px;
+}
+
 div.post {
-    margin: 0 300px 0 0;
     clear: both;
 }
 
+p.postinfo {
+    clear: both;
+    border-top: 1px solid #228855;
+    border-bottom: 1px solid #228855;
+    background: #eee;
+    text-size: 80%;
+    padding-left: 80px;
+}
+
 div.postcontent {
-    float:left;
     padding: 10px;
+    padding-top: 0px;
+    margin-left: 80px;
+    margin-right: 135px;
 }
 
 div#sidebar ul.xoxo {
@@ -39,8 +72,14 @@ div#footer {
 }
 
 div#login-info {
-    float: right;
     font-size: 80%;
+    text-align: right;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+div#login-info a, div#login-info a:active {
+    color: #76c2c9;
 }
 
 input.openid {
@@ -51,15 +90,14 @@ input.openid {
 
 img.gravatar {
     float: left;
-    padding-top: 5px;
+    padding-top: 10px;
 }
 
 #error {
     background: #ffcccc;
     border: 1px solid #dd2222;
     padding: 3px;
-    margin-right: 300px;
 }
 img.screenshot {
-    float: left;
+    float: right;
 }
