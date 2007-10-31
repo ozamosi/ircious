@@ -10,7 +10,9 @@ try:
 except AttributeError:
     from openid import urinorm
     normalizeUrl = urinorm.urinorm
-            
+
+entityregex = re.compile('&[a-zA-Z0-9#]+;')
+
 def addOidUser(nick, url, fromirc=True):
     """
     Add OpenID to users profile, making sure the URL is syntactically correct
@@ -91,7 +93,7 @@ def addPost(nick, channel, url, descr):
 def getTitleFromUrl(url):
     """
     Download the URL and try to extract a title
-
+    
     >>> #Has proper title
     >>> getTitleFromUrl('http://google.com')
     'Google'
@@ -103,6 +105,12 @@ def getTitleFromUrl(url):
     'I LIKE MONKEYS'
     >>> getTitleFromUrl('http://use.perl.org/images/pix.gif')
     'http://use.perl.org/images/pix.gif'
+    >>> #XML Entities
+    >>> getTitleFromUrl('http://brad.livejournal.com/2345245.html')
+    "brad's life - My Halloween Costume...."
+    >>> #HTML Entities
+    >>> getTitleFromUrl('http://www.blinkenlights.se/user/ozamosi') == 'Blinkenlights.se - Användarprofil - Programmering & spelutveckling'
+    True
     """
     page = urlopen(url)
     if page.headers.maintype not in ['text', 'application']: #If it's not text, html or XML, basicly
@@ -126,13 +134,22 @@ def getTitleFromUrl(url):
                         title = url
                 else:
                     title = url
-    # Try to autodetect the encoding:
+    # Try to autodetect the encoding
     try:
         title = title.decode('utf-8')
     except UnicodeDecodeError:
         title = title.decode('latin-1')
-    for x in name2codepoint:
-        title = title.replace('&'+x+';', unichr(name2codepoint[x]))
+    # Remove all entities
+    matches = entityregex.finditer(title)
+    replacedict = {}
+    for match in matches:
+        entity = title[match.start():match.end()]
+        try:
+            replacedict[entity] = unichr(name2codepoint[entity[1:-1]])
+        except KeyError:
+            replacedict[entity] = unichr(int(entity[2:-1]))
+    for entity in replacedict:
+        title = title.replace(entity, replacedict[entity])
     return title.strip().encode('utf-8')
 
 def getUserWithNick(nick):
