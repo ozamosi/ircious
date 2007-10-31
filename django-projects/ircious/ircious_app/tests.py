@@ -23,14 +23,18 @@ class TestEditDelete(TestCase):
         lo.last_post = lp
         lo.save()
 
-    def test_edit(self):
+    def test_edit(self): #Not enough!
         lp = LinkPost.objects.all()[0]
         response = self.client.get('/%i/edit/' % lp.pk)
         self.failUnlessEqual(response.status_code, 200)
 
-    def test_delet(self):
+    def test_delete(self): #Not enough!
         lp = LinkPost.objects.all()[0]
         response = self.client.get('/%i/delete/' % lp.pk)
+        self.failUnlessEqual(response.status_code, 200)
+
+    def test_add_channel(self): #Not enough!
+        response = self.client.get('/add_channel/')
         self.failUnlessEqual(response.status_code, 200)
 
 class TestAllUrlWorks(TestCase):

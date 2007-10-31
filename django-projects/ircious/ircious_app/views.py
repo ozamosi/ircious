@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel
-from ircious.ircious_app.forms import EditForm
+from ircious.ircious_app.forms import EditForm, RequestChannelForm
 from ircious.ircious_app import utils
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import ObjectPaginator
