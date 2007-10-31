@@ -61,10 +61,19 @@ class TestBot(SingleServerIRCBot):
             except:
                 traceback.print_exc(file=sys.stdout)
         elif comment == "disconnect" and nick == "ozamosi":
-            self.disconnect()
-            sys.exit()
+            self.die()
+        elif comment == "reload" and nick == "ozamosi":
+            reload(utils)
+        elif comment == "print-test" and nick == "ozamosi":
+            self.connection.privmsg(e.target(), utils.print_test())
 
 def main():
+    if "--help" in sys.argv:
+        print """<name>.py <options>
+        --help          Show this message
+        --debug         Turn on debuging
+        --only-ircious  Only connect to #ircious on freenode"""
+        return
     if "--debug" in sys.argv:
         print "Debugging..."
         irclib.DEBUG=1
