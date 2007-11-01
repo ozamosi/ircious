@@ -95,6 +95,8 @@ def addPost(nick, channel, url, descr):
             screenshot_url = getYoutubeScreenshotUrl(url)
         elif 'flickr' in url:
             screenshot_url = getFlickrScreenshotUrl(url)
+        else:
+            screenshot_url = ""
         slug = slugify(title)
         if LinkObj.objects.filter(slug=slug):
             num = 1
