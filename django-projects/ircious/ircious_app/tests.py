@@ -116,6 +116,7 @@ __test__ = {
     'getUserWithNick': utils.getUserWithNick,
     'getYoutubeScreenshotUrl': utils.getYoutubeScreenshotUrl,
     'getTitleFromUrl': utils.getTitleFromUrl,
+    'getFlickrScreenshotUrl': utils.getFlickrScreenshotUrl,
 }
 
 if __name__ == "__main__":

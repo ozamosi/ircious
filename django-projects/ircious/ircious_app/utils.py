@@ -3,6 +3,19 @@ from ircious.ircious_app.models import LinkObj, User, LinkPost, Nick, IrcNetwork
 from urllib2 import urlopen
 from htmlentitydefs import name2codepoint
 import re
+
+try:
+    import xml.etree.ElementTree as ET
+except ImportError:
+    try:
+        import CElementTree as ET
+    except ImportError:
+        try:
+            import elementtree.ElementTree as ET
+        except ImportError:
+            import lxml.etree as ET
+# ...because there's only one way to do things in Python
+
 # Try to support both OpenID 1.2 and 2.0:
 try:
     from openid import oidutil
@@ -78,7 +91,10 @@ def addPost(nick, channel, url, descr):
             title = getTitleFromUrl(url)
         except IOError:
             return
-        screenshot_url = getYoutubeScreenshotUrl(url)
+        if 'youtube' in url:
+            screenshot_url = getYoutubeScreenshotUrl(url)
+        elif 'flickr' in url:
+            screenshot_url = getFlickrScreenshotUrl(url)
         slug = slugify(title)
         if LinkObj.objects.filter(slug=slug):
             num = 1
@@ -209,6 +225,37 @@ def getYoutubeScreenshotUrl(url):
     start = xmlfile.index("<thumbnail_url>") + len("<thumbnail_url>")
     end = xmlfile.index("</thumbnail_url>")
     return xmlfile[start:end]
+
+def getFlickrScreenshotUrl(url):
+    """
+    From a Flickr URL, retrieve a screenshot
+
+    >>> getFlickrScreenshotUrl('http://www.flickr.com/photos/psd/1805709102/')
+    'http://farm3.static.flickr.com/2189/1805709102_4fc795431b_t.jpg'
+    >>> getFlickrScreenshotUrl('http://www.flickr.com/photo_zoom.gne?id=1805709102&size=l')
+    'http://farm3.static.flickr.com/2189/1805709102_4fc795431b_t.jpg'
+    >>> getFlickrScreenshotUrl('')
+    """
+    if not url.startswith('http://flickr.com') and not url.startswith('http://www.flickr.com'):
+        return None
+    id = url.strip('/').split('/')[-1]
+    try:
+        int(id)
+    except ValueError:
+        try:
+            start = url.index('id=')+3
+        except ValueError:
+            return None
+        try:
+            end = url.index('&', start)
+        except ValueError:
+            end = len(url)
+        id = url[start:end]
+    response = urlopen("http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=a6ccec61d8016d9b4bac0ccea3139654&photo_id="+id)
+    tree = ET.parse(response)
+    for node in tree.findall('sizes/size'):
+        if node.attrib['label'] == 'Thumbnail':
+            return node.attrib['source']
 
 def slugify(inStr):
     removelist = ["a", "an", "as", "at", "before", "but", "by", "for","from","is", "in", "into", "like", "of", "off", "on", "onto","per","since", "than", "the", "this", "that", "to", "up", "via","with"];
