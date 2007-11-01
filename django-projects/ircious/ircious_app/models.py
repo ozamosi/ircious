@@ -55,7 +55,7 @@ class IrcChannel(models.Model):
         pass
     def toplist(self, numobjects):
         cursor = connection.cursor()
-        cursor.execute("SELECT ircious_app_ircchannel.name, ircious_app_ircnetwork.uri, COUNT(ircious_app_linkpost.channel_id) AS num FROM ircious_app_ircchannel INNER JOIN ircious_app_ircnetwork ON ircious_app_ircchannel.network_id = ircious_app_ircnetwork.id LEFT JOIN ircious_app_linkpost ON ircious_app_ircchannel.id = ircious_app_linkpost.channel_id WHERE active = TRUE GROUP BY ircious_app_ircchannel.id ORDER BY num DESC LIMIT %i" % numobjects)
+        cursor.execute("SELECT ircious_app_ircchannel.name, ircious_app_ircnetwork.uri, COUNT(ircious_app_linkpost.channel_id) AS num FROM ircious_app_ircchannel INNER JOIN ircious_app_ircnetwork ON ircious_app_ircchannel.network_id = ircious_app_ircnetwork.id LEFT JOIN ircious_app_linkpost ON ircious_app_ircchannel.id = ircious_app_linkpost.channel_id WHERE active = 1 GROUP BY ircious_app_ircchannel.id ORDER BY num DESC LIMIT %i" % numobjects)
         result = cursor.fetchall()
         fieldlist = ['name', 'network_uri','num']
         return map((lambda x: dict(zip(fieldlist, x))), result)

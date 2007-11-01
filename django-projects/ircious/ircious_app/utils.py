@@ -79,7 +79,13 @@ def addPost(nick, channel, url, descr):
         except IOError:
             return
         screenshot_url = getYoutubeScreenshotUrl(url)
-        correctlinkobj = LinkObj(url=url, title=title, slug=slugify(title), screenshot=screenshot_url)
+        slug = slugify(title)
+        if LinkObj.objects.filter(slug=slug):
+            num = 1
+            while LinkObj.objects.filter(slug=slug+str(num)):
+                num += 1
+            slug = slug + str(num)
+        correctlinkobj = LinkObj(url=url, title=title, slug=slug, screenshot=screenshot_url)
         correctlinkobj.save()
     else:
         correctlinkobj = existinglinkobj[0]
