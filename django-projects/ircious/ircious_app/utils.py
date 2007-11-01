@@ -147,7 +147,10 @@ def getTitleFromUrl(url):
         try:
             replacedict[entity] = unichr(name2codepoint[entity[1:-1]])
         except KeyError:
-            replacedict[entity] = unichr(int(entity[2:-1]))
+            try: # &#nnnn; base10
+                replacedict[entity] = unichr(int(entity[2:-1]))
+            except ValueError: # &#xhhhh; base16
+                replacedict[entity] = unichr(int(entity[3:-1], 16))
     for entity in replacedict:
         title = title.replace(entity, replacedict[entity])
     return title.strip().encode('utf-8')
