@@ -11,6 +11,8 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'ircious.settings'
 from ircious.ircious_app import utils
 from ircious.ircious_app.models import IrcNetwork
+import threading, Queue
+messages = Queue.Queue()
 
 class TestBot(SingleServerIRCBot):
     def __init__(self, channels, nickname, server, port=6667):
@@ -59,13 +61,25 @@ class TestBot(SingleServerIRCBot):
             try:
                 utils.addPost(nick, e.target(), url, descr)
             except:
-                traceback.print_exc(file=sys.stdout)
+                self.report_error()
         elif comment == "disconnect" and nick == "ozamosi":
             self.die()
+            sys.exit()
         elif comment == "reload" and nick == "ozamosi":
             reload(utils)
         elif comment == "print-test" and nick == "ozamosi":
             self.connection.privmsg(e.target(), utils.print_test())
+    def report_error(self):
+        messages.put(sys.exc_info()[:2])
+
+class Worker(threading.Thread):
+    def __init__(self, channels, nick, server, port):
+        threading.Thread.__init__(self)
+        self.bot = TestBot(channels, nick, server, port)
+    def run(self):
+        self.bot.start()
+
+servers = []
 
 def main():
     if "--help" in sys.argv:
@@ -78,15 +92,25 @@ def main():
         print "Debugging..."
         irclib.DEBUG=1
     if "--only-ircious" in sys.argv:
-        bot = TestBot(['#ircious'], 'ircious', 'irc.freenode.net', 6667)
+        bot = Worker(['#ircious'], 'ircious', 'irc.freenode.net', 6667)
         bot.start()
+        servers.append(bot)
+        bot = Worker(['#ircious'], 'ircious', 'irc.allshells.net', 6667)
+        bot.start()
+        servers.append(bot)
+    else:
+        for network in IrcNetwork.objects.all():
+            channels = network.ircchannel_set.filter(active=True)
+            if not channels:
+                continue
+            bot = Worker(channels, network.bot_nick, network.uri, 6667)
+            bot.start()
+            servers.append(bot)
+    try:
+        while True:
+            print messages.get()
+    except Queue.Empty:
         return
-    for network in IrcNetwork.objects.all():
-        channels = network.ircchannel_set.filter(active=True)
-        if not channels:
-            continue
-        bot = TestBot(channels, network.bot_nick, network.uri, 6667)
-        bot.start()
 
 if __name__ == "__main__":
     main()
