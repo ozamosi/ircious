@@ -11,7 +11,7 @@
 
     {% for post in object_list %}
     <entry>
-        <title>{{ post.link.title }}</title>
+        <title>{{ post.link.title|striptags }}</title>
         <link rel="alternate" href="http://ircious.flukkost.nu/slug/{{ post.link.slug }}"/>
         <id>http://ircious.flukkost.nu/{{ post.pk }}</id>
         <updated>{{ post.date|date:"Y-m-d\TH:i:s\Z" }}</updated>

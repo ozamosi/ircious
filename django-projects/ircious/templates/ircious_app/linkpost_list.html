@@ -8,7 +8,7 @@
 {% if nick %}<h3>{{ nick }}</h3>{% endif %}
     {% for post in object_list %}
     <div class="post">
-        {% if post.user.email %}<img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fuse.perl.org%2Fimages%2Fpix.gif" class="gravatar" alt=""/>{% endif %}
+        {% if post.user.email %}<img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fmedia.flukkost.nu%2Fpix.gif" class="gravatar" alt=""/>{% endif %}
         {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" class="screenshot" alt=""/>{% endif %}
         <div class="postcontent">
             <h4><a href="{{ post.link.url }}">{{ post.link.title|striptags }}</a></h4>
