@@ -81,6 +81,7 @@ def addPost(nick, channel, url, descr):
     >>> lo.last_post.comment
     u'Amazing'
     """
+    correctuser = getUserWithNick(nick)
     channelobjs = IrcChannel.objects.filter(name=channel)
     if not channelobjs:
         raise ValueError, "Invalid channel"
@@ -107,7 +108,6 @@ def addPost(nick, channel, url, descr):
         correctlinkobj.save()
     else:
         correctlinkobj = existinglinkobj[0]
-    correctuser = getUserWithNick(nick)
     
     lp = LinkPost(link=correctlinkobj, user=correctuser, comment=descr, channel=channelobj)
     lp.save()
@@ -191,6 +191,8 @@ def getUserWithNick(nick):
     >>> a == c
     True
     """
+    if "bot" in nick.lower():
+        raise ValueError, "Bot's aren't allowed to post links"
     existinguser = User.objects.filter(nick__nickname=nick)
     if not existinguser:
         correctuser = User()
