@@ -1,12 +1,12 @@
 from django import newforms as forms
-from ircious.ircious_app.models import User
+from ircious.ircious_app.models import User 
 
 # Custom form fields
 class ChannelField(forms.CharField):
     def clean(self, value):
         if not value:
             raise forms.ValidationError("You didn't enter a channel")
-        if value.startswith("#"):
+        if not value.startswith("#"):
             value = "#"+value
         return value
 

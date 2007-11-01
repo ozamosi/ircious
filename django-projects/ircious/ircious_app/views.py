@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel
+from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel, IrcNetwork
 from ircious.ircious_app.forms import EditForm, RequestChannelForm
 from ircious.ircious_app import utils
 from django.core.exceptions import ObjectDoesNotExist
@@ -158,10 +158,12 @@ def add_channel(request):
             network = IrcNetwork.objects.filter(name=data['network'])
             if not network:
                 network = IrcNetwork(name=data['network'])
+                network.save()
             else:
                 network = network[0]
             if not IrcChannel.objects.filter(name=data['channel'], network=network):
-                IrcChannel(name=data['channel'], network=network, requested_by=data['nick'])
+                ic = IrcChannel(name=data['channel'], network=network, requested_by=data['nick'])
+                ic.save()
             return HttpResponseRedirect('/')
     else:
         form = RequestChannelForm()
