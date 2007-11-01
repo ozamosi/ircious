@@ -56,7 +56,7 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
     for x in p:
         x.link.url = x.link.url.replace("&", "&amp;")
         x.link.title = x.link.title.replace("&", "&amp;")
-    response_list['object_list'] = p
+    response_dict['object_list'] = p
     response_dict['slug'] = slug
     response_dict['object'] = obj
     if not feed:
