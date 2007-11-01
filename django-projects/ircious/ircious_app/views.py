@@ -34,6 +34,9 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
             return None
     p = map(getPosts, p)
     p = filter(lambda x: x, p)
+    for x in p:
+        x.link.url = x.link.url.replace("&", "&amp;")
+        x.link.title = x.link.title.replace("&", "&amp;")
     response_dict['object_list'] = p
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
@@ -49,6 +52,11 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
     p = LinkPost.objects.filter(link__slug=slug)
     response_dict = _common(request)
     response_dict = _display_common(response_dict, page, p)
+    p = response_dict['object_list']
+    for x in p:
+        x.link.url = x.link.url.replace("&", "&amp;")
+        x.link.title = x.link.title.replace("&", "&amp;")
+    response_list['object_list'] = p
     response_dict['slug'] = slug
     response_dict['object'] = obj
     if not feed:
@@ -61,9 +69,6 @@ def _display_common(response_dict, page, p):
     p = paginator.get_page(page)
     if not p:
         raise Http404
-    for x in p:
-        x.link.url = x.link.url.replace("&", "&amp;")
-        x.link.title = x.link.title.replace("&", "&amp;")
     response_dict['object_list'] = p
     response_dict['page'] = page
     
