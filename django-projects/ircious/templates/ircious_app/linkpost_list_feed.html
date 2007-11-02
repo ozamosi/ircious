@@ -19,7 +19,7 @@
         <author>
             <name>{{ post.user.nick_set.get.nickname }}</name>
         </author>
-        <link rel="via" href="{{ post.link.url }}"/>
+        <link rel="via" href="{{ post.link.url|fix_ampersands }}"/>
     </entry>
     {% endfor %}
 </feed>

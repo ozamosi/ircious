@@ -11,7 +11,7 @@
         {% if post.user.email %}<img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fmedia.flukkost.nu%2Fpix.gif" class="gravatar" alt=""/>{% endif %}
         {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" class="screenshot" alt=""/>{% endif %}
         <div class="postcontent">
-            <h4><a href="{{ post.link.url }}">{{ post.link.title|escape }}</a></h4>
+            <h4><a href="{{ post.link.url|fix_ampersands }}">{{ post.link.title|escape }}</a></h4>
             <p>{{ post.comment|escape|urlize }}</p>
             <p><a href="/slug/{{ post.link.slug }}">More {% ifnotequal post.link.linkpost_set.count 1 %}({{ post.link.linkpost_set.count }} comments){% endifnotequal %}</a></p>
         </div>
