@@ -21,6 +21,7 @@
                 <a href="/accounts/">Help</a>
             </form>
         {% endif %}
+        <div class="clear"/>
         </div>
     </div>
     <div id="content">
@@ -63,12 +64,13 @@
                 <p><a href="/add_channel/">Request another channel</a></p>
             </li>
             <li>
+                <a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}" rel="alternate" type="application/atom+xml"><img src="http://media.ircious.flukkost.nu/feed-icon.png" alt="Feed"/></a>
             </li>
         </ul>
+        <div class="clear"></div>
     </div>
     <div id="footer">
         Copyright &#169; 2007 Robin Sonefors. No rights reserved. <a href="/whatisthis">What is this?</a>
-        <a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}" rel="alternate" type="application/atom+xml"><img src="http://media.ircious.flukkost.nu/feed-icon.png" alt="Feed"/></a>
 
     </div>
 </body>

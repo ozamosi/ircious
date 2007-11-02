@@ -1,96 +1,123 @@
 body {
     margin: 0px;
-    background: #8eb1c9;
-}
-
-div#sidebar {
-    float: right;
-    overflow: hidden;
-    width: 280px;
-    padding-right: 8px;
-}
-
-div#header {
-    padding-left: 130px;
-}
-
-div#header, div#header h1 a, div#header h1 a:active, div#login-info {
-    margin: 0px;
-    background: #133146;
-    color: #fff;
-    text-decoration: none;
-}
-
-div#content {
-    float: left;
-    margin: 0 -300px 0 0;
-    width: 100%;
-}
-
-div#innercontent {
-    background: #fff;
-    margin-right: 300px;
-    margin-top: 0px;
-}
-
-div.post {
-    clear: both;
-}
-
-p.postinfo {
-    clear: both;
-    border-top: 1px solid #228855;
-    border-bottom: 1px solid #228855;
-    background: #eee;
-    text-size: 80%;
-    padding-left: 80px;
-}
-
-div.postcontent {
-    padding: 10px;
-    padding-top: 0px;
-    margin-left: 80px;
-    margin-right: 135px;
-}
-
-div#sidebar ul.xoxo {
-    list-style-type: none;
+    background: #3465a4;
+    font-family:luxi sans,trebuchet ms,bitstream vera sans,sans-serif;
 }
 
 img {
     border: 0;
 }
 
-div#footer img {
+a {
+    color: #204a87;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family:luxi serif,georgia,times new roman,times,serif;
+}
+
+div#sidebar {
     float: right;
+    overflow: hidden;
+    width: 30ex;
+    padding-right: 1ex;
+    background-color: #eeeeef;
 }
 
 div#footer {
     clear: both;
     font-size: 80%;
     text-align: center;
+    background-color: #eeeeef;
 }
+
+div#header {
+    padding-left: 130px;
+}
+
+div#header, div#header h1 a, div#header h1 a:active, div#login-info, div#header h1 {
+    margin: 0px;
+    background: #14263e;
+    color: #eeeeef;
+    text-decoration: none;
+}
+
+div#content {
+    float: left;
+    margin: 0 -31ex 0 0;
+    width: 100%;
+}
+
+div#innercontent {
+    background: #eeeeef;
+    margin-right: 31ex;
+    margin-top: 0px;
+}
+
+div#innercontent h3 {
+    margin-top: 0px;
+}
+
+div.post div.header {
+    border: 1px solid #333432;
+    background: #d3d7cf;
+    padding: 5px;
+}
+
+div.post div.header h4 {
+    margin-top: 0px;
+}
+
+div.post div.title {
+    float: left;
+}
+
+div.post div.posterinfo {
+    float: right;
+    text-align: right;
+}
+div.post div.posterinfo p {
+    margin: 0px;
+}
+
+img.gravatar {
+    float: left;
+}
+
+img.screenshot {
+    float: left;
+    margin-right: 5px;
+}
+
+div.post div.content {
+    margin-bottom: 1em;
+    padding: 5px;
+}
+
+ul.xoxo {
+    list-style-type: none;
+}
+
+div#sidebar * img {
+    float: right;
+}
+
 
 div#login-info {
     font-size: 80%;
     text-align: right;
-    width: 100%;
-    margin-bottom: 2px;
 }
 
 div#login-info a, div#login-info a:active {
     color: #76c2c9;
+    padding-right: 5px;
 }
 
 input.openid {
     background: url("http://media.ircious.flukkost.nu/login-bg.gif") no-repeat;
     background-position: 0 50%;
-    padding-left: 16px;
-}
-
-img.gravatar {
-    float: left;
-    padding-top: 10px;
+    padding-left: 18px;
+    color: #eeeeef;
 }
 
 #error {
@@ -98,6 +125,7 @@ img.gravatar {
     border: 1px solid #dd2222;
     padding: 3px;
 }
-img.screenshot {
-    float: right;
+
+.clear {
+    clear: both;
 }
