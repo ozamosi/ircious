@@ -16,7 +16,7 @@
             <p><a href="/slug/{{ post.link.slug }}">More {% ifnotequal post.link.linkpost_set.count 1 %}({{ post.link.linkpost_set.count }} comments){% endifnotequal %}</a></p>
         </div>
         <p class="postinfo">Posted by <a href="/user/{{ post.user.nick_set.get.nickname }}">{{ post.user.nick_set.get.nickname }}</a> in <a href="/channel/{{ post.channel|strip:"#" }}">{{ post.channel }}</a> on <time title="GMT" datetime="{{ post.date|date:"Y-m-d\TH:i:s\Z" }}">{{ post.date }}</time>
-        {% if openid %}{% if post.is_faved %}This post is on your favourite list{% else %}<a href="/{{ post.id }}/favourite/">Add this post to your favourites</a>{% endif %}{% ifequal openid post.user %}<a href="{{ post.id }}/edit">Edit</a> <a href="{{ post.id }}/delete">Delete</a>{% endifequal %}{% endif %}</p>
+        {% if openid %}{% if post.is_faved %}This post is on your favourite list{% else %}<a href="/{{ post.id }}/favourite/">Add this post to your favourites</a>{% endif %} {% ifequal openid post.user %}<a href="{{ post.id }}/edit">Edit</a> <a href="{{ post.id }}/delete">Delete</a>{% endifequal %}{% endif %}</p>
     </div>
     {% endfor %}
 {% endblock %}

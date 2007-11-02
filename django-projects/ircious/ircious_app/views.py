@@ -34,6 +34,9 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
     def getPosts(x):
         try:
             res = x.linkpost_set.latest()
+            user = response_dict.get('openid')
+            if user and user in x.user_set.all():
+                res.is_faved = True
             return res
         except ObjectDoesNotExist:
             return None
@@ -176,6 +179,6 @@ def add_favlist(request, id):
     if response_dict.has_key('error'):
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     linkobj = response_dict.pop('object').link
-    user.favlinks.add(linkobj)
-    user.save()
+    response_dict['openid'].favlinks.add(linkobj)
+    response_dict['openid'].save()
     return HttpResponseRedirect(reverse('ircious.ircious_app.views.showlink', kwargs={'slug': linkobj.slug}))
