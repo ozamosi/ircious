@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h3>Editing {{ object.link.title|striptags }}</h3>
+<h3>Editing {{ object.link.title|escape }}</h3>
 <form method="post" action="">
 {{ form.as_p }}
 <input type="submit" />

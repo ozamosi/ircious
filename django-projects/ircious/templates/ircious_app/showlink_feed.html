@@ -6,17 +6,17 @@
     <link rel="via" href="{{ object.url }}"/>
     <updated>{{ lastdate|date:"Y-m-d\TH:i:s\Z" }}</updated>
     <author>
-        <name>Ircious - {{ object.title|striptags }}</name>
+        <name>Ircious - {{ object.title|escape }}</name>
     </author>
     <id>http://ircious.flukkost.nu/slug/{{ slug }}/feed/{% if page %}{{ page }}{% endif %}</id>
 
     {% for post in object_list %}
     <entry>
-        <title>{{ post.link.title|striptags }}</title>
+        <title>{{ post.link.title|escape }}</title>
         <link href="http://ircious.flukkost.nu/slug/{{ post.link.slug }}"/>
         <id>http://ircious.flukkost.nu/{{ post.pk }}</id>
         <updated>{{ post.date|date:"Y-m-d\TH:i:s\Z" }}</updated>
-        <summary>{{ post.comment|striptags }}</summary>
+        <summary>{{ post.comment|escape }}</summary>
         <author>
             <name>{{ post.user.nick_set.get.nickname }}</name>
         </author>

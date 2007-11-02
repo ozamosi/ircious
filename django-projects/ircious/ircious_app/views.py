@@ -34,9 +34,6 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
             return None
     p = map(getPosts, p)
     p = filter(lambda x: x, p)
-    for x in p:
-        x.link.url = x.link.url.replace("&", "&amp;")
-        x.link.title = x.link.title.replace("&", "&amp;")
     response_dict['object_list'] = p
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
@@ -49,15 +46,10 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
     else:
         page=0
     obj = get_object_or_404(LinkObj, slug=slug)
-    obj.url = obj.url.replace("&", "&amp;")
-    obj.title = obj.title.replace("&", "&amp;")
     p = LinkPost.objects.filter(link__slug=slug)
     response_dict = _common(request)
     response_dict = _display_common(response_dict, page, p)
     p = response_dict['object_list']
-    for x in p:
-        x.link.url = x.link.url.replace("&", "&amp;")
-        x.link.title = x.link.title.replace("&", "&amp;")
     response_dict['object_list'] = p
     response_dict['slug'] = slug
     response_dict['object'] = obj
@@ -82,9 +74,6 @@ def _display_common(response_dict, page, p):
 
 def _common(request):
     popular = LinkObj().toplist(5)
-    for x in popular:
-        x['url'] = x['url'].replace("&", "&amp;")
-        x['title'] = x['title'].replace("&", "&amp;")
     topusers = User().toplist(5)
     topchannels = IrcChannel().toplist(5)
     try:
