@@ -34,6 +34,11 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
             return None
     p = map(getPosts, p)
     p = filter(lambda x: x, p)
+    if response_dict.get('openid'):
+        user = response_dict['openid']
+        for x in p:
+            if user in x.favlinks.all():
+                x.is_faved = True
     response_dict['object_list'] = p
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
@@ -165,3 +170,12 @@ def add_channel(request):
         form = RequestChannelForm()
     response_dict['form'] = form
     return render_to_response('ircious_app/add_channel.html', response_dict)
+
+def add_favlist(request, id):
+    response_dict = _post_validate(request, id)
+    if response_dict.has_key('error'):
+        return render_to_response('ircious_app/linkpost_list.html', response_dict)
+    linkobj = response_dict.pop('object').link
+    user.favlinks.add(linkobj)
+    user.save()
+    return HttpResponseRedirect(reverse('ircious.ircious_app.views.showlink', kwargs={'slug': linkobj.slug}))

@@ -26,6 +26,7 @@ class LinkObj(models.Model):
 class User(models.Model):
     oid_url = models.URLField(max_length=200, blank=True)
     email = models.EmailField(blank=True)
+    favlinks = models.ManyToManyField(LinkObj, null=True, blank=True)
     class Admin:
         pass
     def toplist(self, numobjects):

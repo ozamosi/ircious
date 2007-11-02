@@ -15,4 +15,6 @@ urlpatterns = patterns('ircious.ircious_app.views',
     (r'^(?P<id>[0-9]+)/edit/$', 'edit_post',),
     (r'^(?P<id>[0-9]+)/delete/$', 'delete_post',),
     (r'^add_channel/$', 'add_channel',),
+
+    (r'^(?P<id>[0-9]+)/favourite/$', 'add_favlist',),
 )

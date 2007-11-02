@@ -5,7 +5,7 @@ from ircious.ircious_app.models import LinkObj
 from django.test import TestCase
 from django.test.client import Client
 
-class TestEditDelete(TestCase):
+class TestModifyingOperationsUnsatisfyingly(TestCase):
     def setUp(self):
         TestCase.setUp(self)
         u = User()
@@ -23,15 +23,22 @@ class TestEditDelete(TestCase):
         lo.last_post = lp
         lo.save()
 
-    def test_edit(self): #Not enough!
+    def test_edit(self):
         lp = LinkPost.objects.all()[0]
         response = self.client.get('/%i/edit/' % lp.pk)
         self.failUnlessEqual(response.status_code, 200)
 
-    def test_delete(self): #Not enough!
+    def test_delete(self):
         lp = LinkPost.objects.all()[0]
         response = self.client.get('/%i/delete/' % lp.pk)
         self.failUnlessEqual(response.status_code, 200)
+
+    def test_addfav(self):
+        lp = LinkPost.objects.all()[0]
+        response = self.client.get('/%i/favourite/' % lp.pk)
+        self.failUnlessEqual(response.status_code, 200)
+
+
 class TestAddChannel(TestCase):
     def setUp(self):
         TestCase.setUp(self)
