@@ -49,6 +49,8 @@ def showlink(request, slug=None, page=None, feed=False, url=None):
     else:
         page=0
     obj = get_object_or_404(LinkObj, slug=slug)
+    obj.link.url = obj.link.url.replace("&", "&amp;")
+    obj.link.title = obj.link.title.replace("&", "&amp;")
     p = LinkPost.objects.filter(link__slug=slug)
     response_dict = _common(request)
     response_dict = _display_common(response_dict, page, p)
