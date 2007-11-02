@@ -26,6 +26,11 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
     response_dict = _display_common(response_dict, page, p)
     response_dict['nick'] = username
     p = response_dict['object_list']
+    if response_dict.get('openid'):
+        user = response_dict['openid']
+        for x in p:
+            if user in x.favlinks.all():
+                x.is_faved = True
     def getPosts(x):
         try:
             res = x.linkpost_set.latest()
@@ -34,11 +39,6 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
             return None
     p = map(getPosts, p)
     p = filter(lambda x: x, p)
-    if response_dict.get('openid'):
-        user = response_dict['openid']
-        for x in p:
-            if user in x.favlinks.all():
-                x.is_faved = True
     response_dict['object_list'] = p
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
