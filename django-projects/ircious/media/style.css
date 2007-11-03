@@ -129,3 +129,14 @@ input.openid {
 .clear {
     clear: both;
 }
+/* SVG styles */
+.not-selected {
+    fill: #c4a000;
+    stroke: #362c00;
+    stroke-width: 1;
+}
+.selected {
+    fill: #fce94f;
+    stroke: #494317;
+    stroke-width: 1;
+}

@@ -5,24 +5,18 @@
                 <h4>
                     <a href="{{ post.link.url|fix_ampersands }}">{{ post.link.title|escape }}</a>
                 {% if openid %}
-                    {% if post.is_faved %}
-                    This post is on your favourite list
-                    {% else %}
-                    <a href="/{{ post.id }}/favourite/" title="Add this post to your favourites">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="-1 -1 17 17">
-                            <path d="M0 10 L6 10 L6 16 L10 16 L10 10 L16 10 L16 6 L10 6 L10 0 L6 0 L6 6 L0 6 L0 10" style="fill:#73d216;stroke:#162904;stroke-width:1"/>
-                        </svg>
-                    </a>
-                    {% endif %}
+                    <svg width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                        <path id="favourite-{{ post.id }}" class="{% if post.is_faved %}selected{% else %}not-selected{% endif %}" title="Add to your favourites" onclick="setFavourite(this)" d="M9,2 L11,7 L17,7 L12,11 L14,17  L9,13 L4,17  L6,11 L1,7 L7,7Z" />
+                    </svg>
                     {% ifequal openid post.user %}
                     <a href="/{{ post.id }}/edit/" title="Edit this post">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="-1 -1 11 17">
-                            <path d="M0 0 L10 0 L10 3 L3 3 L3 6 L7 6 L7 9 L3 9 L3 13 L10 13 L10 16 L0 16 L0 0" style="fill:#edd400;stroke:#2e2900;stroke-width:1"/>
+                            <path d="M0,0 L10,0 L10,3 L3,3 L3,6 L7,6 L7,9 L3,9 L3,13 L10,13 L10,16 L0,16Z" style="fill:#73d216;stroke:#162904;stroke-width:1"/>
                         </svg>
                     </a>
                     <a href="/{{ post.id }}/delete/" title="Delete this post">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="-1 -1 17 17">
-                            <path d="M3 0 L8 6 L13 0 L16 3 L10 8 L16 13 L13 16 L8 10 L3 16 L0 13 L6 8 L0 3 L3 0" style="fill:#cc0000;stroke:#3e0000;stroke-width:1"/>
+                            <path d="M3,0 L8,6 L13,0 L16,3 L10,8 L16,13 L13,16 L8,10 L3,16 L0,13 L6,8 L0,3 L3,0" style="fill:#cc0000;stroke:#3e0000;stroke-width:1"/>
                         </svg>
                     </a>
                     {% endifequal %}
