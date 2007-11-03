@@ -134,9 +134,11 @@ input.openid {
     fill: #c4a000;
     stroke: #362c00;
     stroke-width: 1;
+    cursor: pointer;
 }
 .selected {
     fill: #fce94f;
     stroke: #494317;
     stroke-width: 1;
+    cursor: pointer;
 }

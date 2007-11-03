@@ -80,6 +80,24 @@ def favourites(request, username, page=None, feed=False):
         response_dict = _display_common(response_dict, page, p)
     except Http404:
         response_dict['error'] = "This user hasn't got any favourites"
+    p = response_dict['object_list']
+    if response_dict.get('openid'):
+        user = response_dict['openid']
+        for x in p:
+            if user in x.user_set.all():
+                x.is_faved = True
+    def getPosts(x):
+        try:
+            res = x.linkpost_set.latest()
+            user = response_dict.get('openid')
+            if user and user in x.user_set.all():
+                res.is_faved = True
+            return res
+        except ObjectDoesNotExist:
+            return None
+    p = map(getPosts, p)
+    p = filter(lambda x: x, p)
+    response_dict['object_list'] = p
     response_dict['nick'] = username
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
@@ -199,9 +217,9 @@ def add_favlist(request, id):
     if response_dict.has_key('error'):
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     linkobj = response_dict.pop('object').link
-    if (response_dict['openid'].favlinks.filter(linkobj=linkobj)):
+    if (response_dict['openid'].favlinks.filter(id=linkobj.id)):
         response_dict['openid'].favlinks.remove(linkobj)
     else:
         response_dict['openid'].favlinks.add(linkobj)
     response_dict['openid'].save()
-    return HttpResponseRedirect(reverse('ircious.ircious_app.views.showlink', kwargs={'slug': linkobj.slug}))
+    return render_to_response('ircious_app/showlink.html', response_dict)
