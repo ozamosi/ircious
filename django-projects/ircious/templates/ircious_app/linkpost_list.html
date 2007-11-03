@@ -2,10 +2,12 @@
 
 {% load misc %}
 
-{% block title %}Ircious{% if nick %} - {{ nick }}{% endif %}{% endblock %}
+{% block title %}{% if nick %}{{ nick }}{% endif %}{% if channel %}{{ channel }}{% endif %}{% endblock %}
 
 {% block content %}
-{% if nick %}<h3>{{ nick }}</h3>{% endif %}
+{% if nick %}<h3>{{ nick }}</h3>
+<p>You can also view this users <a href="/user/{{ nick }}/favourites/">favourite links</a></p>
+{% endif %}
     {% for post in object_list %}
         {% include "ircious_app/the_loop.html" %}
     {% endfor %}

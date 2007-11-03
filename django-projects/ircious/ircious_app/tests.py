@@ -92,30 +92,33 @@ class TestAllUrlWorks(TestCase):
         lo.save()
 
     def do_test(self, path, code):
-        response = self.client.get(path)
-        self.failUnlessEqual(response.status_code, code)
+        def test(path, code):
+            response = self.client.get(path)
+            self.failUnlessEqual(response.status_code, code)
+        test(path, code)
+        test(path+'feed/', code)
+        test(path+'0/', code)
+        test(path+'feed/0/', code)
+
 
     def test_start(self):
         self.do_test('/', 200)
-        self.do_test('/feed/', 200)
 
     def test_user(self):
         self.do_test('/user/ozamosi/', 200)
-        self.do_test('/user/ozamosi/feed/', 200)
         self.do_test('/user/not-ozamosi/', 404)
-        self.do_test('/user/not-ozamosi/feed/', 404)
+
+    def test_user_favourites(self):
+        self.do_test('/user/ozamosi/favourites/', 200)
+        self.do_test('/user/not-ozamosi/favourites/', 404)
 
     def test_channel(self):
         self.do_test('/channel/ircious/', 200)
-        self.do_test('/channel/ircious/feed/', 200)
         self.do_test('/channel/not-ircious/', 404)
-        self.do_test('/channel/not-ircious/feed/', 404)
 
     def test_slug(self):
-        self.do_test('/slug/test-one-that-doesnt-really-exist/feed/', 404)
-        self.do_test('/slug/test-one-that-doesnt-really-exist/', 404)
-        self.do_test('/slug/test-one-that-actually-does-exist/feed/', 200)
         self.do_test('/slug/test-one-that-actually-does-exist/', 200)
+        self.do_test('/slug/test-one-that-doesnt-really-exist/', 404)
 
 __test__ = {
     'addOidUser': utils.addOidUser,

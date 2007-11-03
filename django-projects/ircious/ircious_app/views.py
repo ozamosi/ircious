@@ -50,21 +50,41 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
 
 def showlink(request, slug=None, page=None, feed=False, url=None):
     if page: 
-        page=int(page)
+        page = int(page)
     else:
-        page=0
+        page = 0
     obj = get_object_or_404(LinkObj, slug=slug)
     p = LinkPost.objects.filter(link__slug=slug)
     response_dict = _common(request)
     response_dict = _display_common(response_dict, page, p)
-    p = response_dict['object_list']
-    response_dict['object_list'] = p
     response_dict['slug'] = slug
     response_dict['object'] = obj
     if not feed:
         return render_to_response('ircious_app/showlink.html', response_dict)
     else:
         return render_to_response('ircious_app/showlink_feed.html', response_dict, mimetype="application/atom+xml")
+
+def favourites(request, username, page=None, feed=False):
+    if page:
+        page = int(page)
+    else:
+        page = 0
+    users = User.objects.filter(nick__nickname=username)
+    if not users:
+        raise Http404
+    else:
+        user = users[0]
+    p = user.favlinks.all()
+    response_dict = _common(request)
+    try:
+        response_dict = _display_common(response_dict, page, p)
+    except Http404:
+        response_dict['error'] = "This user hasn't got any favourites"
+    response_dict['nick'] = username
+    if not feed:
+        return render_to_response('ircious_app/linkpost_list.html', response_dict)
+    else:
+        return render_to_response('ircious_app/linkpost_list_feed.html', response_dict, mimetype="application/atom+xml")
 
 def _display_common(response_dict, page, p):
     paginator = ObjectPaginator(p, 20, 2)
