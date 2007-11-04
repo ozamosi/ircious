@@ -80,7 +80,7 @@ def favourites(request, username, page=None, feed=False):
         response_dict = _display_common(response_dict, page, p)
     except Http404:
         response_dict['error'] = "This user hasn't got any favourites"
-    p = response_dict['object_list']
+    p = response_dict.get('object_list', [])
     if response_dict.get('openid'):
         user = response_dict['openid']
         for x in p:
