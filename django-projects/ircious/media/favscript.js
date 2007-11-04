@@ -2,7 +2,7 @@ function setFavourite(object)
 {
     var id = object.id.substr(10);
     var request = new XMLHttpRequest();
-    request.open('GET', '/'+id+'/favourite/', true);
+    request.open('POST', '/'+id+'/favourite/', true);
     request.onreadystatechange = function()
     {
         if (request.readyState == 4 && request.status == 200)
@@ -10,7 +10,8 @@ function setFavourite(object)
             toggleClass(object);
         }
     }
-    request.send();
+    request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+    request.send("Id: "+id);
 }
 
 function toggleClass(object)
@@ -23,4 +24,5 @@ function toggleClass(object)
     {
         object.className.baseVal = "selected";
     }
+    // What the hell is wrong with opera!?
 }

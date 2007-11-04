@@ -132,7 +132,7 @@ def _common(request):
         response_dict['openid'] = User.objects.filter(oid_url=request.openid)[0]
     return response_dict
 
-def _post_validate(request, id):
+def _post_validate(request, id, is_owner=True):
     response_dict = _common(request)
     if not request.openid:
         response_dict['error'] = "You naughty girl! You're not logged in!"
@@ -147,7 +147,7 @@ def _post_validate(request, id):
         response_dict['error'] = "You're trying to muck with something that isn't here. Stop it!"
         return response_dict
     object = objects[0]
-    if object.user != user:
+    if is_owner and object.user != user:
         response_dict['error'] = "You naughty boy! You're trying to play with other's content without consent!"
         return response_dict
     response_dict['object'] = object
@@ -213,7 +213,7 @@ def add_channel(request):
     return render_to_response('ircious_app/add_channel.html', response_dict)
 
 def add_favlist(request, id):
-    response_dict = _post_validate(request, id)
+    response_dict = _post_validate(request, id, False)
     if response_dict.has_key('error'):
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     linkobj = response_dict.pop('object').link

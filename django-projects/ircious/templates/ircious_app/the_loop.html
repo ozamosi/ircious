@@ -6,7 +6,7 @@
                     <a href="{{ post.link.url|fix_ampersands }}">{{ post.link.title|escape }}</a>
                 {% if openid %}
                     <svg width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" version="1.1">
-                        <path id="favourite-{{ post.id }}" class="{% if post.is_faved %}selected{% else %}not-selected{% endif %}" title="Add to your favourites" onclick="setFavourite(this)" d="M9,2 L11,7 L17,7 L12,11 L14,17  L9,13 L4,17  L6,11 L1,7 L7,7Z" />
+                        <path id="favourite-{{ post.id }}" class="{% if post.is_faved %}selected{% else %}not-selected{% endif %}" xhtml:title="Add to your favourites" onclick="setFavourite(this);" d="M9,2 L11,7 L17,7 L12,11 L14,17  L9,13 L4,17  L6,11 L1,7 L7,7Z" />
                     </svg>
                     {% ifequal openid post.user %}
                     <a href="/{{ post.id }}/edit/" title="Edit this post">
