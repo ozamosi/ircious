@@ -14,15 +14,21 @@ function setFavourite(object)
     request.send("Id: "+id);
 }
 
-function toggleClass(object)
+function toggle(object)
 {
-    if (object.className.baseVal == "selected")
+    var thisg = object.parentNode;
+    var id = thisg.getAttribute("id");
+    if (id.substr(id.length-1) == "n")
     {
-        object.className.baseVal = "not-selected";
+        thisg.setAttribute("display", "none");
+        otherg = document.getElementById(id.substr(0, id.length-1)+"s")
+        otherg.setAttribute("display", "inline");
     }
     else
     {
-        object.className.baseVal = "selected";
+        thisg.setAttribute("display", "none");
+        otherg = document.getElementById(id.substr(0, id.length-1)+"n")
+        otherg.setAttribute("display", "inline");
     }
-    // What the hell is wrong with opera!?
+
 }
