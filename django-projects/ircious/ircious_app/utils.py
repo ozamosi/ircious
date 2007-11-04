@@ -97,7 +97,7 @@ def addPost(nick, channel, url, descr):
         elif 'flickr' in url:
             screenshot_url = getFlickrScreenshotUrl(url)
         else:
-            screenshot_url = ""
+            screenshot_url = None
         slug = slugify(title)
         if LinkObj.objects.filter(slug=slug):
             num = 1
@@ -259,7 +259,7 @@ def getFlickrScreenshotUrl(url):
     tree = ET.parse(response)
     for node in tree.findall('sizes/size'):
         if node.attrib['label'] == 'Thumbnail':
-            return node.attrib['source']
+            return node.attrib['url']
 
 def slugify(inStr):
     removelist = ["a", "an", "as", "at", "before", "but", "by", "for","from","is", "in", "into", "like", "of", "off", "on", "onto","per","since", "than", "the", "this", "that", "to", "up", "via","with"];
