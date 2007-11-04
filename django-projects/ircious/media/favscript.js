@@ -1,6 +1,6 @@
 function setFavourite(object)
 {
-    var id = object.id.substr(10);
+    var id = object.getAttribute("id").substr(3, object.id.length-1);
     var request = new XMLHttpRequest();
     request.open('POST', '/'+id+'/favourite/', true);
     request.onreadystatechange = function()
