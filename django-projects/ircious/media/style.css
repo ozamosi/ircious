@@ -35,7 +35,7 @@ div#header {
     padding-left: 130px;
 }
 
-div#header, div#header h1 a, div#header h1 a:active, div#login-info, div#header h1 {
+div#header, div#header h1 a, div#header h1 a:active, div#header h1 {
     margin: 0px;
     background: #14263e;
     color: #eeeeef;
@@ -75,16 +75,17 @@ div.post div.title {
 div.post div.posterinfo {
     float: right;
     text-align: right;
+    width: 250px;
 }
 div.post div.posterinfo p {
     margin: 0px;
 }
 
-img.gravatar {
-    float: left;
+div.post div.posterinfo div.gravatar {
+    float: right;
 }
 
-img.screenshot {
+div.screenshot {
     float: left;
     margin-right: 5px;
 }
@@ -113,11 +114,14 @@ div#login-info a, div#login-info a:active {
     padding-right: 5px;
 }
 
+div#login-info * p {
+    margin-bottom: 0px;
+}
+
 input.openid {
-    background: url("http://media.ircious.flukkost.nu/login-bg.gif") no-repeat;
+    background: url("http://media.ircious.flukkost.nu/login-bg.gif")  #eeeeef no-repeat;
     background-position: 0 50%;
     padding-left: 18px;
-    color: #eeeeef;
 }
 
 #error {

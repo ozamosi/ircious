@@ -8,7 +8,7 @@
 {% if nick %}<h3>{{ nick }}</h3>
 <p>You can also view this users <a href="/user/{{ nick }}/favourites/">favourite links</a></p>
 {% endif %}
-    {% for post in object_list %}
-        {% include "ircious_app/the_loop.html" %}
-    {% endfor %}
+{% for post in object_list %}
+    {% include "ircious_app/the_loop.html" %}
+{% endfor %}
 {% endblock %}

@@ -17,9 +17,11 @@
             Welcome, {{ openid.nick_set.get.nickname }}. <a href="/openid/signout">Logout</a>
         {% else %}
             <form action="/openid/" method="post">
-                <label for="openid_url">Sign in:</label>
-                <input class="openid" type="text" name="openid_url" id="openid_url"/>
-                <a href="/accounts/">Help</a>
+                <p>
+                    <label for="openid_url">Sign in:</label>
+                    <input class="openid" type="text" name="openid_url" id="openid_url"/>
+                    <a href="/accounts/">Help</a>
+                </p>
             </form>
         {% endif %}
         <div class="clear"/>
