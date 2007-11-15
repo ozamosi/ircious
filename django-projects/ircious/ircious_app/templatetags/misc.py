@@ -2,6 +2,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 import md5 as md5lib
+import sha
 register = template.Library()
 
 @register.filter
@@ -15,3 +16,13 @@ def strip(string, stripchars):
 def md5(string):
     "Returns MD5 checksum for string. Usefull for gravatars"
     return md5lib.new(string).hexdigest()
+
+@register.filter
+def microidify(mail, nick):
+    "Creates a microid hash"
+    hash = sha.new(
+        sha.new("mailto:"+mail).hexdigest()
+        +
+        sha.new(nick.nickname).hexdigest()
+    ).hexdigest()
+    return "mailto+http:sha1:"+hash

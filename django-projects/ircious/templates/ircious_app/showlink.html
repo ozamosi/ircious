@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load misc %}
-{% block title %}Ircious - {{ object.title|escape }}{% endblock %}
+{% block title %}{{ object.title|escape }}{% endblock %}
 
 {% block content %}
 <h3><a href="{{ object.url }}">{{ object.title|escape }}</a></h3>

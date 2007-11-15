@@ -2,10 +2,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv">
 <head>
-    <title>{% block title %}Ircious{% endblock %}</title>
+    <title>Ircious - {% block title %}Start{% endblock %}</title>
     <link rel="alternate" type="application/atom+xml" href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}"/>
     <link rel="stylesheet" type="text/css" href="http://media.ircious.flukkost.nu/style.css"/>
     <script src="http://media.ircious.flukkost.nu/localize_dates.js" type="text/javascript"/>
+    {% block headers %}{% endblock %}
 </head>
 <body>
     <div id="header">
