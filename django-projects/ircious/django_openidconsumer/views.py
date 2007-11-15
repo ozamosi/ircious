@@ -134,7 +134,7 @@ def default_on_success(request, identity_url, openid_response):
         next = getattr(settings, 'OPENID_REDIRECT_NEXT', '/')
     
     user = User.objects.filter(oid_url=identity_url)[0]
-    email = openid_response.extensionResponse('sreg')['email']
+    email = openid_response.extensionResponse('sreg').get('email')
     if email and email != user.email:
         user.email = email
         user.save()

@@ -23,6 +23,6 @@ def microidify(mail, nick):
     hash = sha.new(
         sha.new("mailto:"+mail).hexdigest()
         +
-        sha.new(nick.nickname).hexdigest()
+        sha.new("http://ircious.flukkost.nu/user/%s/" % nick.nickname).hexdigest()
     ).hexdigest()
     return "mailto+http:sha1:"+hash

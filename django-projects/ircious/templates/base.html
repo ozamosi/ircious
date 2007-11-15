@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <head>
-    <title>{% block title %}Ircious{% endblock %}</title>
-    <link rel="alternate" type="application/atom+xml" href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}"/>
+    <title>Ircious - {% block title %}Start{% endblock %}</title>
+    <link rel="alternate" type="application/atom+xml" href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick.nickname }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}"/>
     <link rel="stylesheet" type="text/css" href="http://media.ircious.flukkost.nu/style.css"/>
     <script src="http://media.ircious.flukkost.nu/localize_dates.js" type="text/javascript"/>
     <script src="http://media.ircious.flukkost.nu/favscript.js" type="text/javascript"/>
+    {% block headers %}{% endblock %}
 </head>
 <body>
     <div id="header">
@@ -32,10 +33,10 @@
             {% if error %}<div id="error">{{ error }}</div>{% endif %}
             {% block content %}<p>Nice weather for ducks</p>{% endblock %}
             {% if prev or page %}
-            <p class="prev"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ prev }}">Previous</a></p>
+            <p class="prev"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick.nickname }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ prev }}">Previous</a></p>
             {% endif %}
             {% if next %}
-            <p class="next"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ next }}">Next</a></p>
+            <p class="next"><a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick.nickname }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}{{ next }}">Next</a></p>
             {% endif %}
         </div>
     </div>
@@ -67,7 +68,7 @@
                 <p><a href="/add_channel/">Request another channel</a></p>
             </li>
             <li>
-                <a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}" rel="alternate" type="application/atom+xml"><img src="http://media.ircious.flukkost.nu/feed-icon.png" alt="Feed"/></a>
+                <a href="http://ircious.flukkost.nu/{% if channel %}channel/{{ channel }}/{% endif %}{% if nick %}user/{{ nick.nickname }}/{% endif %}{% if object.slug %}slug/{{ object.slug }}/{% endif %}feed/{{ page }}" rel="alternate" type="application/atom+xml"><img src="http://media.ircious.flukkost.nu/feed-icon.png" alt="Feed"/></a>
             </li>
         </ul>
         <div class="clear"></div>

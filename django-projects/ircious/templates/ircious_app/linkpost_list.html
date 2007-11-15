@@ -2,12 +2,12 @@
 
 {% load misc %}
 
-{% block title %}{% if nick %}{{ nick }}{% endif %}{% if channel %}{{ channel }}{% endif %}{% endblock %}
+{% block title %}{% if nick %}{{ nick.nickname }}{% endif %}{% if channel %}{{ channel }}{% endif %}{% endblock %}
 
 {% block headers %}{% if nick and nick.user.email %}<meta name="microid" content="{{ nick.user.email|microidify:nick }}" />{% endif %}{% endblock %}
 
 {% block content %}
-{% if nick %}<h3>{{ nick }}</h3>
+{% if nick %}<h3>{{ nick.nickname }}</h3>
 <p>You can also view this users <a href="/user/{{ nick }}/favourites/">favourite links</a></p>
 {% endif %}
 {% for post in object_list %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel, IrcNetwork
+from ircious.ircious_app.models import LinkPost, LinkObj, User, IrcChannel, IrcNetwork, Nick
 from ircious.ircious_app.forms import EditForm, RequestChannelForm
 from ircious.ircious_app import utils
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,12 +19,11 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
         response_dict['error']=error
     if username:
         p = p.filter(last_post__user__nick__nickname=username)
-        response_dict['nick']=username
+        response_dict['nick'] = Nick.objects.filter(nickname=username).get()
     elif channel:
         p = p.filter(last_post__channel__name="#"+channel)
         response_dict['channel']=channel
     response_dict = _display_common(response_dict, page, p)
-    response_dict['nick'] = username
     p = response_dict['object_list']
     if response_dict.get('openid'):
         user = response_dict['openid']
