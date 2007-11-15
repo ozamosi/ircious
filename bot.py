@@ -29,6 +29,7 @@ class TestBot(SingleServerIRCBot):
     def on_pubmsg(self, c, e):
         comment = e.arguments()[0]
         nick = nm_to_n(e.source())
+        host = nm_to_h(e.source())
         if irc_lower(comment).startswith(irc_lower(self.connection.get_nickname()+": openid=")):
             try:
                 utils.addOidUser(nick, comment[len(self.connection.get_nickname()+": openid="):])
@@ -62,12 +63,12 @@ class TestBot(SingleServerIRCBot):
                 utils.addPost(nick, e.target(), url, descr)
             except:
                 self.report_error()
-        elif comment == "disconnect" and nick == "ozamosi":
+        elif comment == "disconnect" and nick == "ozamosi" and host in ("85.8.1.10", "85.8.1.10.static.se.wasadata.net", "unaffiliated/ozamosi"):
             self.die()
             sys.exit()
-        elif comment == "reload" and nick == "ozamosi":
+        elif comment == "reload" and nick == "ozamosi" and host in ("85.8.1.10", "85.8.1.10.static.se.wasadata.net", "unaffiliated/ozamosi"):
             reload(utils)
-        elif comment == "print-test" and nick == "ozamosi":
+        elif comment == "print-test" and nick == "ozamosi" and host in ("85.8.1.10", "85.8.1.10.static.se.wasadata.net", "unaffiliated/ozamosi"):
             self.connection.privmsg(e.target(), utils.print_test())
     def report_error(self):
         messages.put(sys.exc_info()[:2])
