@@ -215,11 +215,11 @@ def add_channel(request):
 def add_favlist(request, id):
     response_dict = _post_validate(request, id, False)
     if response_dict.has_key('error'):
-        return render_to_response('ircious_app/linkpost_list.html', response_dict)
+        return render_to_response('ircious_app/favourite.html', response_dict)
     linkobj = response_dict.pop('object').link
     if (response_dict['openid'].favlinks.filter(id=linkobj.id)):
         response_dict['openid'].favlinks.remove(linkobj)
     else:
         response_dict['openid'].favlinks.add(linkobj)
     response_dict['openid'].save()
-    return render_to_response('ircious_app/showlink.html', response_dict)
+    return render_to_response('ircious_app/favourite.html', response_dict)

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<svg width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" version="1.1">
+    <style type="text/css"><![CDATA[
+    @import url(style.css);
+    ]]>
+    </style>
+    <script type="text/javascript"><![CDATA[
+    function setFavourite(object)
+    {
+        var id = object.parentNode.getAttribute("id").substr(3, object.parentNode.getAttribute("id").length-4);
+        var request = new XMLHttpRequest();
+        request.open('POST', '/'+id+'/favourite/', true);
+        request.onreadystatechange = function()
+        {
+            if (request.readyState == 4 && request.status == 200)
+            {
+            }
+        }
+        request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        //    request.send("Id: "+id);
+        var thisg = object.parentNode;
+        var fullid = thisg.getAttribute("id");
+        if (fullid.substr(fullid.length-1) == "n")
+        {
+            thisg.setAttribute("display", "none");
+            otherg = document.getElementById(fullid.substr(0, fullid.length-1)+"s")
+            otherg.setAttribute("display", "inline");
+        }
+        else
+        {
+            thisg.setAttribute("display", "none");
+            otherg = document.getElementById(fullid.substr(0, fullid.length-1)+"n")
+            otherg.setAttribute("display", "inline");
+        }
+    }
+    ]]></script>
+    <g>
+        <g id="fav1n" display="inline">
+            <path class="not-selected" d="M9,2 L11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7Z" onclick="setFavourite(this)" xhtml:title="Add to your favourites"/>
+        </g>
+        <g id="fav1s" display="none">
+            <path class="selected" d="M9,2 L11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7Z" onclick="setFavourite(this)" xhtml:title="Remove from your favourites"/>
+        </g>
+    </g>
+</svg>
