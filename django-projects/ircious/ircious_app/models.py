@@ -2,7 +2,7 @@ from django.db import models, connection
 
 # Create your models here.
 class LinkObj(models.Model):
-    url = models.URLField()
+    url = models.URLField(max_length=300)
     title = models.CharField(max_length=200)
     slug = models.SlugField(prepopulate_from=("title",))
     last_post = models.ForeignKey('LinkPost', blank=True, null=True)
@@ -65,7 +65,7 @@ class IrcChannel(models.Model):
 class LinkPost(models.Model):
     link = models.ForeignKey(LinkObj)
     user = models.ForeignKey(User)
-    comment = models.CharField(max_length=200, blank=True)
+    comment = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
     channel = models.ForeignKey(IrcChannel)
     class Admin:
