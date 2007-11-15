@@ -14,7 +14,7 @@ from ircious.ircious_app.models import IrcNetwork
 import threading, Queue
 messages = Queue.Queue()
 
-class TestBot(SingleServerIRCBot):
+class IrcBot(SingleServerIRCBot):
     def __init__(self, channels, nickname, server, port=6667):
         SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
         self.my_channels = channels
@@ -75,7 +75,7 @@ class TestBot(SingleServerIRCBot):
 class Worker(threading.Thread):
     def __init__(self, channels, nick, server, port):
         threading.Thread.__init__(self)
-        self.bot = TestBot(channels, nick, server, port)
+        self.bot = IrcBot(channels, nick, server, port)
     def run(self):
         self.bot.start()
 
