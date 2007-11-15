@@ -29,7 +29,7 @@
                     {% endifequal %}
                 {% endif %}
                 </h4>
-                <p>{{ post.link.url|fix_ampersands|urlizetrunc:50 }}</p>
+                <p>{{ post.link.url|urlizetrunc:50|fix_ampersands }}</p>
             </div> <!-- .title -->
             <div class="posterinfo">
                 {% if post.user.email %}<div class="gravatar"><img src="http://www.gravatar.com/avatar.php?gravatar_id={{ post.user.email|md5 }}&amp;default=http%3A%2F%2Fmedia.flukkost.nu%2Fpix.gif" alt=""/></div>{% endif %}
@@ -49,7 +49,7 @@
             {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" alt=""/>{% endif %}
             </div>
             <div class="text">
-                {% if post.comment %}<p>{{ post.comment|escape|urlizetrunc:50 }}</p>{% endif %}
+                {% if post.comment %}<p>{{ post.comment|urlizetrunc:50|escape }}</p>{% endif %}
                 <p><a href="/slug/{{ post.link.slug }}">More {% ifnotequal post.link.linkpost_set.count 1 %}({{ post.link.linkpost_set.count }} comments){% endifnotequal %}</a></p>
             </div> <!-- .text -->
             <div class="clear"></div>
