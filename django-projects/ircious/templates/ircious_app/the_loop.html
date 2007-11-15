@@ -49,7 +49,7 @@
             {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" alt=""/>{% endif %}
             </div>
             <div class="text">
-                {% if post.comment %}<p>{{ post.comment|urlizetrunc:50|escape }}</p>{% endif %}
+                {% if post.comment %}<p>{{ post.comment|escape|urlizetrunc:50}}</p>{% endif %}
                 <p><a href="/slug/{{ post.link.slug }}">More {% ifnotequal post.link.linkpost_set.count 1 %}({{ post.link.linkpost_set.count }} comments){% endifnotequal %}</a></p>
             </div> <!-- .text -->
             <div class="clear"></div>
