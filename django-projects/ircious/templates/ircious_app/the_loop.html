@@ -46,7 +46,7 @@
         </div> <!-- .header -->
         <div class="content">
             <div class="screenshot">
-            {% if post.link.screenshot %}<img src="{{ post.link.screenshot }}" alt=""/>{% endif %}
+            {% if post.link.screenshot %}<img src="{{ post.link.screenshot|fix_ampersands }}" alt=""/>{% endif %}
             </div>
             <div class="text">
                 {% if post.comment %}<p>{{ post.comment|escape|urlizetrunc:50}}</p>{% endif %}
