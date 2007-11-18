@@ -44,8 +44,9 @@ class IrcBot(SingleServerIRCBot):
                 url = comment[start:end]
             else:
                 url = comment[start:]
-            url.rstrip('/')
-
+            url=url.rstrip('/')
+            url=url.strip('"')
+            url=url.strip("'")
             if start and end != -1:
                 descr = comment
             elif start:
