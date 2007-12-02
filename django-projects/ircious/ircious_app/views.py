@@ -83,7 +83,7 @@ def search(request, searchstring, page):
     postresults = LinkPost.objects.filter(comment__search=searchstring)
     response_dict['object_list'] = postresults
     finalresults = _post2link(response_dict)
-    finalresults.update(linkresults)
+    finalresults.extend(linkresults)
     
     try:
         response_dict = _display_common(response_dict, page, finalresults)
