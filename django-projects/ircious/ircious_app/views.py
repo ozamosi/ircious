@@ -19,29 +19,15 @@ def list(request, username=None, page=None, feed=False, channel=None, error=None
         response_dict['error']=error
     if username:
         p = p.filter(last_post__user__nick__nickname=username)
-        response_dict['nick'] = Nick.objects.filter(nickname=username).get()
+        try:
+            response_dict['nick'] = Nick.objects.filter(nickname=username).get()
+        except ObjectDoesNotExist:
+            response_dict['error'] = "No such user"
     elif channel:
         p = p.filter(last_post__channel__name="#"+channel)
         response_dict['channel']=channel
     response_dict = _display_common(response_dict, page, p)
-    p = response_dict['object_list']
-    if response_dict.get('openid'):
-        user = response_dict['openid']
-        for x in p:
-            if user in x.user_set.all():
-                x.is_faved = True
-    def getPosts(x):
-        try:
-            res = x.linkpost_set.latest()
-            user = response_dict.get('openid')
-            if user and user in x.user_set.all():
-                res.is_faved = True
-            return res
-        except ObjectDoesNotExist:
-            return None
-    p = map(getPosts, p)
-    p = filter(lambda x: x, p)
-    response_dict['object_list'] = p
+    response_dict['object_list'] = _post2link(response_dict)
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     else:
@@ -79,25 +65,32 @@ def favourites(request, username, page=None, feed=False):
         response_dict = _display_common(response_dict, page, p)
     except Http404:
         response_dict['error'] = "This user hasn't got any favourites"
-    p = response_dict.get('object_list', [])
-    if response_dict.get('openid'):
-        user = response_dict['openid']
-        for x in p:
-            if user in x.user_set.all():
-                x.is_faved = True
-    def getPosts(x):
-        try:
-            res = x.linkpost_set.latest()
-            user = response_dict.get('openid')
-            if user and user in x.user_set.all():
-                res.is_faved = True
-            return res
-        except ObjectDoesNotExist:
-            return None
-    p = map(getPosts, p)
-    p = filter(lambda x: x, p)
-    response_dict['object_list'] = p
+    response_dict['object_list'] = _post2link(response_dict)
     response_dict['nick'] = username
+    if not feed:
+        return render_to_response('ircious_app/linkpost_list.html', response_dict)
+    else:
+        return render_to_response('ircious_app/linkpost_list_feed.html', response_dict, mimetype="application/atom+xml")
+
+def search(request, searchstring, page):
+    if page:
+        page = int(page)
+    else:
+        page = 0
+    response_dict = _common(request)
+    
+    linkresults = LinkObj.objects.filter(title__search=searchstring)
+    postresults = LinkPost.objects.filter(comment__search=searchstring)
+    response_dict['object_list'] = postresults
+    finalresults = _post2link(response_dict)
+    finalresults.update(linkresults)
+    
+    try:
+        response_dict = _display_common(response_dict, page, finalresults)
+    except Http404:
+        response_dict['error'] = "No matches"
+    response_dict['object_list'] = finalresults
+    
     if not feed:
         return render_to_response('ircious_app/linkpost_list.html', response_dict)
     else:
@@ -116,6 +109,21 @@ def _display_common(response_dict, page, p):
     if paginator.has_previous_page(page):
         response_dict['prev'] = page-1
     return response_dict
+
+def _post2link(response_dict):
+    object_list = response_dict.get('object_list', [])
+    def getPosts(x):
+        try:
+            res = x.linkpost_set.latest()
+            user = response_dict.get('openid')
+            if user and user in x.user_set.all():
+                res.is_faved = True
+            return res
+        except ObjectDoesNotExist:
+            return None
+    object_list = map(getPosts, object_list)
+    object_list = filter(lambda x: x, object_list)
+    return object_list
 
 def _common(request):
     popular = LinkObj().toplist(5)

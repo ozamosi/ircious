@@ -24,4 +24,7 @@ urlpatterns = patterns('ircious.ircious_app.views',
     (r'^add_channel/$', 'add_channel',),
 
     (r'^(?P<id>[0-9]+)/favourite/$', 'add_favlist',),
+
+    (r'^search/(?P<searchstring>.*)/((?P<page>\d+)/)?$', 'search'),
+    (r'^search/(?P<searchstring>.*)/feed/((?P<page>\d+)/)?$', 'search', {'feed': True}),
 )

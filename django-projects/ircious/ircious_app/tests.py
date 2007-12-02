@@ -120,6 +120,9 @@ class TestAllUrlWorks(TestCase):
         self.do_test('/slug/test-one-that-actually-does-exist/', 200)
         self.do_test('/slug/test-one-that-doesnt-really-exist/', 404)
 
+    def test_search(self):
+        self.do_test('/search/searchstring/', 200)
+
 __test__ = {
     'addOidUser': utils.addOidUser,
     'addPost': utils.addPost,
