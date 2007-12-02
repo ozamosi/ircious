@@ -72,7 +72,7 @@ def favourites(request, username, page=None, feed=False):
     else:
         return render_to_response('ircious_app/linkpost_list_feed.html', response_dict, mimetype="application/atom+xml")
 
-def search(request, searchstring, page):
+def search(request, searchstring, page, feed=False):
     if page:
         page = int(page)
     else:
