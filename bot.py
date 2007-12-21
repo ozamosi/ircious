@@ -36,7 +36,7 @@ class IrcBot(SingleServerIRCBot):
                 self.connection.privmsg(e.target(), "Ok")
             except ValueError, LookupError:
                 self.connection.privmsg(e.target(), "Invalid OpenID")
-        elif "http://" in comment:
+        elif "http://" in comment and not "[off]" in comment:
             start = comment.find("http://")
             end = comment.find(" ", start)
             
@@ -95,9 +95,6 @@ def main():
         irclib.DEBUG=1
     if "--only-ircious" in sys.argv:
         bot = Worker(['#ircious'], 'ircious', 'irc.freenode.net', 6667)
-        bot.start()
-        servers.append(bot)
-        bot = Worker(['#ircious'], 'ircious', 'irc.allshells.net', 6667)
         bot.start()
         servers.append(bot)
     else:
